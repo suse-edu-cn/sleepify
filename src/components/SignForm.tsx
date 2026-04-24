@@ -76,12 +76,12 @@ export default function SignForm() {
     }
 
     return (
-        <section className="sleepy-sign-wrap">
-            <mdui-card className="sleepy-sign-card">
-                <h1 className="sleepy-sign-title">登录 Sleepy</h1>
-                <p className="sleepy-sign-subtitle">请输入学号与密码后继续</p>
+        <section className="sleepify-sign-wrap">
+            <mdui-card className="sleepify-sign-card">
+                <h1 className="sleepify-sign-title">登录睡了么</h1>
+                <p className="sleepify-sign-subtitle">输入学号密码后继续</p>
 
-                <form className="sleepy-form" onSubmit={onSubmit}>
+                <form className="sleepify-form" onSubmit={onSubmit}>
                     <mdui-text-field
                         required
                         label="用户名"

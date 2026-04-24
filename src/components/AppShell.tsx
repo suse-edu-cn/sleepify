@@ -15,14 +15,16 @@ export default function AppShell({ children }: AppShellProps) {
         pathname === '/' || pathname === '/ranking' || pathname === '/info' ? pathname : ''
 
     return (
-        <div className="sleepy-shell">
-            <mdui-top-app-bar className="sleepy-top-bar">
-                <mdui-top-app-bar-title className="sleepy-top-title">Sleepy</mdui-top-app-bar-title>
+        <div className="sleepify-shell">
+            <mdui-top-app-bar className="sleepify-top-bar">
+                <mdui-top-app-bar-title className="sleepify-top-title">
+                    睡了么
+                </mdui-top-app-bar-title>
             </mdui-top-app-bar>
 
-            <main className="sleepy-content">{children}</main>
+            <main className="sleepify-content">{children}</main>
 
-            <mdui-navigation-bar className="sleepy-bottom-nav" value={navValue}>
+            <mdui-navigation-bar className="sleepify-bottom-nav" value={navValue}>
                 <mdui-navigation-bar-item
                     value="/"
                     onClick={() => {

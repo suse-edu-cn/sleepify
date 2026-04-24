@@ -65,44 +65,48 @@ export default function InfoPage() {
     }
 
     return (
-        <section className="sleepy-page">
-            <div className="sleepy-avatar-area">
+        <section className="sleepify-page">
+            <div className="sleepify-avatar-area">
                 <mdui-avatar
-                    src="https://obj.crrashh.com/prod/assets_sleepy/icon.jpg"
-                    className="sleepy-avatar"
+                    src="https://obj.crrashh.com/prod/assets_sleepify/icon.jpg"
+                    className="sleepify-avatar"
                 />
-                <div className="sleepy-info-title">Sleepy 代签到工具</div>
+                <div className="sleepify-info-title">睡了么</div>
             </div>
 
-            <div className="sleepy-info-area">
-                <div className="sleepy-catalog">个人信息</div>
+            <div className="sleepify-info-area">
+                <div className="sleepify-catalog">个人信息</div>
                 <mdui-card>
                     {userLoading ? (
                         <mdui-circular-progress></mdui-circular-progress>
                     ) : (
-                        <mdui-list className="sleepy-info-list">
-                            <mdui-list-item className="sleepy-info-item" icon="class">
-                                <div className="sleepy-info-row">
+                        <mdui-list className="sleepify-info-list">
+                            <mdui-list-item className="sleepify-info-item" icon="class">
+                                <div className="sleepify-info-row">
                                     <span>学号</span>
-                                    <span className="sleepy-info-value">{user?.number ?? '-'}</span>
+                                    <span className="sleepify-info-value">
+                                        {user?.number ?? '-'}
+                                    </span>
                                 </div>
                             </mdui-list-item>
-                            <mdui-list-item className="sleepy-info-item" icon="school">
-                                <div className="sleepy-info-row">
+                            <mdui-list-item className="sleepify-info-item" icon="school">
+                                <div className="sleepify-info-row">
                                     <span>班级</span>
-                                    <span className="sleepy-info-value">{user?.class ?? '-'}</span>
+                                    <span className="sleepify-info-value">
+                                        {user?.class ?? '-'}
+                                    </span>
                                 </div>
                             </mdui-list-item>
-                            <mdui-list-item className="sleepy-info-item" icon="message">
-                                <div className="sleepy-info-row">
+                            <mdui-list-item className="sleepify-info-item" icon="message">
+                                <div className="sleepify-info-row">
                                     <span>QQ</span>
-                                    <span className="sleepy-info-value">{user?.qq ?? '-'}</span>
+                                    <span className="sleepify-info-value">{user?.qq ?? '-'}</span>
                                 </div>
                             </mdui-list-item>
-                            <mdui-list-item className="sleepy-info-item" icon="star">
-                                <div className="sleepy-info-row">
+                            <mdui-list-item className="sleepify-info-item" icon="star">
+                                <div className="sleepify-info-row">
                                     <span>积分</span>
-                                    <span className="sleepy-info-value">
+                                    <span className="sleepify-info-value">
                                         {typeof user?.points === 'number' ? user.points : '-'}
                                     </span>
                                 </div>
@@ -112,26 +116,26 @@ export default function InfoPage() {
                 </mdui-card>
             </div>
 
-            <div className="sleepy-info-area">
-                <div className="sleepy-catalog">关于应用</div>
+            <div className="sleepify-info-area">
+                <div className="sleepify-catalog">关于应用</div>
                 <mdui-card>
-                    <mdui-list className="sleepy-info-list">
+                    <mdui-list className="sleepify-info-list">
                         <mdui-list-item
-                            className="sleepy-info-item"
+                            className="sleepify-info-item"
                             icon="share"
                             end-icon="arrow_right"
                             onClick={() => {
                                 void onShare()
                             }}
                         >
-                            <div className="sleepy-info-row">
+                            <div className="sleepify-info-row">
                                 <span>分享</span>
                             </div>
                         </mdui-list-item>
-                        <mdui-list-item className="sleepy-info-item" icon="info">
-                            <div className="sleepy-info-row">
+                        <mdui-list-item className="sleepify-info-item" icon="info">
+                            <div className="sleepify-info-row">
                                 <span>版本</span>
-                                <span className="sleepy-info-value">{'v' + version}</span>
+                                <span className="sleepify-info-value">{'v' + version}</span>
                             </div>
                         </mdui-list-item>
                     </mdui-list>
