@@ -1,0 +1,221 @@
+@import url('./fonts.css');
+
+:root {
+    --sleepy-shell-max-width: 680px;
+}
+
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--mdui-color-surface-bright-light);
+    color: rgb(var(--mdui-color-on-background));
+}
+
+.sleepy-shell {
+    min-height: 100vh;
+    width: 100%;
+    max-width: var(--sleepy-shell-max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+
+.sleepy-top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 16px;
+    background-color: rgb(var(--mdui-color-surface-container));
+    box-shadow: var(--mdui-elevation-level2);
+    font-family: 'Google Sans';
+}
+
+.sleepy-top-title {
+    letter-spacing: -0.01em;
+    font-weight: 700;
+}
+
+.sleepy-content {
+    flex: 1;
+    width: 100%;
+    padding: 20px 16px 0;
+}
+
+.sleepy-bottom-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: min(100%, var(--sleepy-shell-max-width));
+    z-index: 20;
+    border-top: 1px solid rgba(var(--mdui-color-outline-variant), 0.45);
+    background: rgb(var(--mdui-color-surface-container));
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.sleepy-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sleepy-card {
+    border-radius: var(--mdui-shape-corner-large);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sleepy-card-title {
+    margin: 0;
+    font-size: 0.95rem;
+    color: rgba(var(--mdui-color-on-surface), 0.72);
+}
+
+.sleepy-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sleepy-refresh-btn {
+    border: none;
+    background: transparent;
+    color: rgba(var(--mdui-color-on-surface), 0.72);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--mdui-shape-corner-full);
+    padding: 0;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        color 160ms ease;
+}
+
+.sleepy-refresh-btn:hover {
+    background: rgba(var(--mdui-color-primary), 0.1);
+    color: rgb(var(--mdui-color-primary));
+}
+
+.sleepy-refresh-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.sleepy-card-sleep-status {
+    font-size: 1.15rem;
+    line-height: 2.5;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.sleepy-time-grid {
+    display: grid;
+    gap: 8px;
+}
+
+.sleepy-time-tag {
+    font-size: 0.9rem;
+    color: rgba(var(--mdui-color-on-surface), 0.75);
+}
+
+.sleepy-sleep-progress {
+    font-size: 0.8rem;
+    color: rgba(var(--mdui-color-on-surface), 0.75);
+    line-height: 1.8;
+}
+
+.sleepy-sleep-progress-percent {
+    text-align: right;
+    font-size: 0.9rem;
+    color: rgba(var(--mdui-color-on-surface), 0.75);
+}
+
+.sleepy-sign-wrap {
+    min-height: calc(100vh - 210px);
+    display: grid;
+    place-items: center;
+}
+
+.sleepy-sign-card {
+    width: min(100%, 420px);
+    border-radius: var(--mdui-shape-corner-extra-large);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sleepy-sign-title {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.sleepy-sign-subtitle {
+    margin: 0;
+    color: rgba(var(--mdui-color-on-surface), 0.7);
+    font-size: 0.92rem;
+}
+
+.sleepy-catalog {
+    font-weight: 600;
+    color: rgb(var(--mdui-color-on-primary-dark));
+    font-size: 0.95rem;
+    margin: 0 0 8px 8px;
+}
+
+.sleepy-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sleepy-avatar-area {
+    min-height: 160px;
+    display: grid;
+    place-items: center;
+}
+
+.sleepy-avatar {
+    width: 96px;
+    height: 96px;
+}
+
+.sleepy-info-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepy-info-area * {
+    width: 100%;
+}
+
+.sleepy-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.sleepy-info-value {
+    text-align: right;
+    color: rgba(var(--mdui-color-on-surface), 0.7);
+}
