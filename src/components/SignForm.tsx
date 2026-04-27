@@ -69,6 +69,8 @@ export default function SignForm() {
                 },
             })
 
+            // 登录成功后替换路由到首页
+            // 使用 replace 而不是 push，避免用户返回到登录页
             router.replace('/')
         } finally {
             setSubmitting(false)
