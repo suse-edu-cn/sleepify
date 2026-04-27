@@ -30,9 +30,12 @@ export async function GET(request: Request) {
     }
 
     try {
-        const upstreamResponse = await upstream.get<UpstreamPointsRankingItem[]>('/leaderboard/current-points/', {
-            headers: getAuthHeader(token),
-        })
+        const upstreamResponse = await upstream.get<UpstreamPointsRankingItem[]>(
+            '/leaderboard/current-points/',
+            {
+                headers: getAuthHeader(token),
+            }
+        )
 
         return success(upstreamResponse.data)
     } catch (error) {

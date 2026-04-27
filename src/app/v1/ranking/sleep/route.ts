@@ -33,9 +33,12 @@ export async function GET(request: Request) {
     }
 
     try {
-        const upstreamResponse = await upstream.get<UpstreamSleepRankingItem[]>('/sleep/rankings/', {
-            headers: getAuthHeader(token),
-        })
+        const upstreamResponse = await upstream.get<UpstreamSleepRankingItem[]>(
+            '/sleep/rankings/',
+            {
+                headers: getAuthHeader(token),
+            }
+        )
 
         return success(
             upstreamResponse.data.map((item) => ({
