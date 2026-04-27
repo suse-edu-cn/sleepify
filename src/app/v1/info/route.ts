@@ -46,6 +46,7 @@ export async function GET(request: Request) {
         )
 
         return success({
+            id,
             number: upstreamResponse.data.student_number,
             class: upstreamResponse.data.class_name,
             qq: upstreamResponse.data.qq,

@@ -2,7 +2,6 @@
 
 import type { ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { alert } from 'mdui/functions/alert.js'
 
 type AppShellProps = {
     children: ReactNode
@@ -40,11 +39,9 @@ export default function AppShell({ children }: AppShellProps) {
                 <mdui-navigation-bar-item
                     value="/ranking"
                     onClick={() => {
-                        void alert({
-                            headline: '排行榜',
-                            description: '正在开发中......',
-                            confirmText: '知道了',
-                        })
+                        if (pathname !== '/ranking') {
+                            router.push('/ranking')
+                        }
                     }}
                 >
                     <mdui-icon-align-vertical-bottom slot="icon" />
