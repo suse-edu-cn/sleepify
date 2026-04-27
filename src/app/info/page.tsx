@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import '../styles/info.css'
 import { useRouter } from 'next/navigation'
 import { snackbar } from 'mdui/functions/snackbar.js'
 import { useUserState } from '@/components/UserStateProvider'
@@ -154,6 +155,11 @@ export default function InfoPage() {
             >
                 退出登录
             </mdui-button>
+
+            <p className='sleepify-info-motto'>
+                才发现关于梦的答案&nbsp;&nbsp;&nbsp;一直在自己手上<br/>
+                只有自己能&nbsp;&nbsp;&nbsp;让自己发光
+            </p>
         </section>
     )
 }

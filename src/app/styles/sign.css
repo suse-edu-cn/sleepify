@@ -1,0 +1,31 @@
+.sleepify-sign-wrap {
+    min-height: calc(100vh - 210px);
+    display: grid;
+    place-items: center;
+}
+
+.sleepify-sign-card {
+    width: min(100%, 420px);
+    border-radius: var(--mdui-shape-corner-extra-large);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sleepify-sign-title {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.sleepify-sign-subtitle {
+    margin: 0;
+    color: rgba(var(--mdui-color-on-surface), 0.7);
+    font-size: 0.92rem;
+}
+
+.sleepify-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}

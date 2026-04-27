@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import '../styles/ranking.css'
 import { alert } from 'mdui/functions/alert.js'
 import { requestApi } from '@/lib/request/client'
 import { useUserState } from '@/components/UserStateProvider'

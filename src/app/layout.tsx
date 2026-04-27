@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import 'mdui/mdui.css'
-import './globals.css'
+
+import './styles/base.css'
+import './styles/fonts.css'
+
 import AppShell from '@/components/AppShell'
 import AppProviders from '@/components/AppProviders'
 import MduiRuntime from '@/components/MduiRuntime'

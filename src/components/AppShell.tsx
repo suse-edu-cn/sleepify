@@ -15,7 +15,7 @@ export default function AppShell({ children }: AppShellProps) {
 
     return (
         <div className="sleepify-shell">
-            <mdui-top-app-bar className="sleepify-top-bar">
+            <mdui-top-app-bar className="sleepify-top-bar" suppressHydrationWarning>
                 <mdui-top-app-bar-title className="sleepify-top-title">
                     睡了么
                 </mdui-top-app-bar-title>

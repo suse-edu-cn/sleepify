@@ -1,0 +1,27 @@
+.sleepify-info-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-info-area * {
+    width: 100%;
+}
+
+.sleepify-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.sleepify-info-value {
+    text-align: right;
+    color: rgba(var(--mdui-color-on-surface), 0.7);
+}
+
+.sleepify-info-motto {
+    color: rgb(var(--mdui-color-on-primary-dark));
+    line-height: 2.25;
+}

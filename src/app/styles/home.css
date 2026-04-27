@@ -1,0 +1,76 @@
+.sleepify-card {
+    border-radius: var(--mdui-shape-corner-large);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sleepify-card-title {
+    margin: 0;
+    font-size: 0.95rem;
+    color: rgba(var(--mdui-color-on-surface), 0.72);
+}
+
+.sleepify-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sleepify-refresh-btn {
+    border: none;
+    background: transparent;
+    color: rgba(var(--mdui-color-on-surface), 0.72);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--mdui-shape-corner-full);
+    padding: 0;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        color 160ms ease;
+}
+
+.sleepify-refresh-btn:hover {
+    background: rgba(var(--mdui-color-primary), 0.1);
+    color: rgb(var(--mdui-color-primary));
+}
+
+.sleepify-refresh-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.sleepify-card-sleep-status {
+    font-size: 1.15rem;
+    line-height: 2.5;
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.sleepify-time-grid {
+    display: grid;
+    gap: 8px;
+}
+
+.sleepify-time-tag {
+    font-size: 0.9rem;
+    color: rgba(var(--mdui-color-on-surface), 0.75);
+}
+
+.sleepify-sleep-progress {
+    font-size: 0.8rem;
+    color: rgba(var(--mdui-color-on-surface), 0.75);
+    line-height: 1.8;
+}
+
+.sleepify-sleep-progress-percent {
+    text-align: right;
+    font-size: 0.9rem;
+    color: rgba(var(--mdui-color-on-surface), 0.75);
+}
