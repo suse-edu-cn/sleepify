@@ -44,8 +44,8 @@ export default function InfoPage() {
 
         try {
             await requestApi<Record<string, never>>({
-                url: '/sign',
-                method: 'DELETE',
+                url: '/sign/out',
+                method: 'POST',
             })
         } finally {
             clearUser()

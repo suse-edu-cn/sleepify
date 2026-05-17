@@ -61,7 +61,7 @@ export default function SignForm() {
 
         try {
             await requestApi<{ token: string; id: string }>({
-                url: '/sign',
+                url: '/sign/in',
                 method: 'POST',
                 data: {
                     username,
