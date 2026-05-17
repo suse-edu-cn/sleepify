@@ -10,13 +10,20 @@ const client = axios.create({
     timeout: 10000,
 })
 
+const AUTH_ERROR_CODES = new Set([1001, 1002])
+
 client.interceptors.response.use(
     (response) => response,
     (error) => {
-        const message =
-            (axios.isAxiosError(error) &&
-                (error.response?.data as { message?: string } | undefined)?.message) ||
-            '网络请求失败'
+        const data = axios.isAxiosError(error)
+            ? (error.response?.data as { code?: number; message?: string } | undefined)
+            : undefined
+
+        if (data?.code && AUTH_ERROR_CODES.has(data.code)) {
+            return Promise.reject(error)
+        }
+
+        const message = data?.message || '网络请求失败'
 
         snackbar({
             message,
@@ -33,11 +40,13 @@ export async function requestApi<T extends object>(config: AxiosRequestConfig): 
     const payload = response.data
 
     if (payload.code !== 0) {
-        snackbar({
-            message: payload.message || '请求失败',
-            closeable: true,
-            placement: 'top',
-        })
+        if (!AUTH_ERROR_CODES.has(payload.code)) {
+            snackbar({
+                message: payload.message || '请求失败',
+                closeable: true,
+                placement: 'top',
+            })
+        }
 
         throw new ApiRequestError(payload.code, payload.message || '请求失败')
     }

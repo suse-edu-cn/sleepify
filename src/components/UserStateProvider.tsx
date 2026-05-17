@@ -3,7 +3,9 @@
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { snackbar } from 'mdui/functions/snackbar.js'
 import { requestApi } from '@/lib/request/client'
+import { ApiRequestError } from '@/lib/request/types'
 import type { SleepStatusData } from '@/lib/sleep/types'
 import type { UserInfo } from '@/lib/user/types'
 
@@ -48,7 +50,22 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
 
             setUser(data)
             return data
-        } catch {
+        } catch (error) {
+            if (error instanceof ApiRequestError) {
+                if (error.code === 1002) {
+                    snackbar({
+                        message: '登录状态失效，请重新登录',
+                        closeable: true,
+                        placement: 'top',
+                    })
+                }
+
+                if (error.code === 1001 || error.code === 1002) {
+                    await fetch('/v1/sign/out', { method: 'POST' }).catch(() => {})
+                    window.location.replace('/sign')
+                }
+            }
+
             return null
         } finally {
             setUserLoading(false)

@@ -24,17 +24,7 @@ export async function POST(request: Request) {
         return fail(1001, '未检测到登录状态')
     }
 
-    try {
-        await upstream.post(
-            '/auth/logout/',
-            null,
-            {
-                headers: getAuthHeader(token),
-            }
-        )
-
-        const response = success({})
-
+    const clearCookies = (response: Response) => {
         response.cookies.set({
             name: 'token',
             value: '',
@@ -54,9 +44,21 @@ export async function POST(request: Request) {
         })
 
         return response
+    }
+
+    try {
+        await upstream.post(
+            '/auth/logout/',
+            null,
+            {
+                headers: getAuthHeader(token),
+            }
+        )
+
+        return clearCookies(success({}))
     } catch (error) {
         if (isInvalidTokenError(error)) {
-            return fail(1002, '登录状态无效')
+            return clearCookies(fail(1002, '登录状态无效'))
         }
 
         return internalError()
