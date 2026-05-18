@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { NextResponse } from 'next/server'
 import { fail, internalError, success } from '@/lib/server/api'
 import { getAuthHeader, isInvalidTokenError, upstream } from '@/lib/server/upstream'
 
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
         return fail(1001, '未检测到登录状态')
     }
 
-    const clearCookies = (response: Response) => {
+    const clearCookies = (response: NextResponse) => {
         response.cookies.set({
             name: 'token',
             value: '',
