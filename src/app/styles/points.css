@@ -1,3 +1,9 @@
+.sleepify-points-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .sleepify-points-section {
     display: flex;
     flex-direction: column;
@@ -9,6 +15,12 @@
     font-size: 18px;
     font-weight: 600;
     color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-points-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: rgb(var(--mdui-color-primary));
 }
 
 .sleepify-points-challenge-list {
@@ -71,4 +83,53 @@
     font-size: 18px;
     color: rgb(var(--mdui-color-on-surface));
     padding: 32px 0;
+}
+
+.sleepify-points-history-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-points-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sleepify-points-history-item {
+    gap: 8px;
+}
+
+.sleepify-points-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sleepify-points-history-reason {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-points-history-change {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgb(var(--mdui-color-error));
+    white-space: nowrap;
+}
+
+.sleepify-points-history-change-positive {
+    color: rgb(var(--mdui-color-primary));
+}
+
+.sleepify-points-history-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: rgba(var(--mdui-color-on-surface), 0.6);
 }
