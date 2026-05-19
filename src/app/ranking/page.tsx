@@ -58,7 +58,7 @@ export default function RankingPage() {
         try {
             if (type === 'sleep') {
                 const data = await requestApi<SleepRankingItem[]>({
-                    url: '/ranking/sleep',
+                    url: '/sleep/ranking',
                     method: 'GET',
                 })
                 setSleepRanking(data)
@@ -66,7 +66,7 @@ export default function RankingPage() {
             }
 
             const data = await requestApi<PointsRankingItem[]>({
-                url: '/ranking/points',
+                url: '/points/ranking',
                 method: 'GET',
             })
             setPointsRanking(data)
