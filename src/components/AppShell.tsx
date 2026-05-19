@@ -11,7 +11,9 @@ export default function AppShell({ children }: AppShellProps) {
     const pathname = usePathname()
     const router = useRouter()
     const navValue =
-        pathname === '/' || pathname === '/ranking' || pathname === '/info' ? pathname : ''
+        pathname === '/' || pathname === '/ranking' || pathname === '/points' || pathname === '/info'
+            ? pathname
+            : ''
     const isSignPage = pathname === '/sign'
 
     return (
@@ -48,6 +50,18 @@ export default function AppShell({ children }: AppShellProps) {
                     >
                         <mdui-icon-align-vertical-bottom slot="icon" />
                         排行榜
+                    </mdui-navigation-bar-item>
+
+                    <mdui-navigation-bar-item
+                        value="/points"
+                        onClick={() => {
+                            if (pathname !== '/points') {
+                                router.push('/points')
+                            }
+                        }}
+                    >
+                        <mdui-icon-star slot="icon" />
+                        积分
                     </mdui-navigation-bar-item>
 
                     <mdui-navigation-bar-item

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { requestApi } from '@/lib/request/client'
 import { useUserState } from '@/components/UserStateProvider'
 
@@ -35,9 +35,6 @@ function getTimeStr(totalMinutes: number) {
 
 export default function HomeDashboard() {
     const {
-        user,
-        userLoading,
-        refreshUser,
         sleepStatus,
         sleepLoading,
         refreshSleepStatus,
@@ -55,10 +52,6 @@ export default function HomeDashboard() {
             window.clearInterval(timer)
         }
     }, [])
-
-    const fetchUserInfo = useCallback(async () => {
-        await refreshUser({ clearBeforeLoad: true })
-    }, [refreshUser])
 
     const sleepContent = useMemo(() => {
         if (sleepLoading) {
@@ -175,29 +168,6 @@ export default function HomeDashboard() {
                 {sleepContent}
             </mdui-card>
 
-            <mdui-card className="sleepify-card">
-                <div className="sleepify-card-title-row">
-                    <h2 className="sleepify-card-title">积分</h2>
-                    <button
-                        type="button"
-                        className="sleepify-refresh-btn"
-                        aria-label="刷新积分"
-                        disabled={userLoading}
-                        onClick={() => {
-                            void fetchUserInfo()
-                        }}
-                    >
-                        <mdui-icon-refresh />
-                    </button>
-                </div>
-                {userLoading ? (
-                    <mdui-circular-progress />
-                ) : (
-                    <div className="sleepify-card-body">
-                        {typeof user?.points === 'number' ? user.points : '暂未获取到积分信息'}
-                    </div>
-                )}
-            </mdui-card>
         </section>
     )
 }

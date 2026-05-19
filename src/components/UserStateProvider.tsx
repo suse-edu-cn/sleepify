@@ -9,18 +9,33 @@ import { ApiRequestError } from '@/lib/request/types'
 import type { SleepStatusData } from '@/lib/sleep/types'
 import type { UserInfo } from '@/lib/user/types'
 
-type RefreshUserOptions = {
+type RefreshOptions = {
     clearBeforeLoad?: boolean
+}
+
+type CurrentChallenge = {
+    id: number
+    name: string
+    is_onetime: boolean
+    points: number
+    duration: number
+    start_date: string
+    end_date: string | null
+    completed_date: string | null
+    status: string
 }
 
 type UserStateContextValue = {
     user: UserInfo | null
     userLoading: boolean
-    refreshUser: (options?: RefreshUserOptions) => Promise<UserInfo | null>
+    refreshUser: (options?: RefreshOptions) => Promise<UserInfo | null>
     sleepStatus: SleepStatusData | null
     sleepLoading: boolean
-    refreshSleepStatus: (options?: RefreshUserOptions) => Promise<SleepStatusData | null>
+    refreshSleepStatus: (options?: RefreshOptions) => Promise<SleepStatusData | null>
     updateSleepStatus: (value: SleepStatusData | null) => void
+    challenges: CurrentChallenge[] | null
+    challengesLoading: boolean
+    refreshChallenges: (options?: RefreshOptions) => Promise<CurrentChallenge[] | null>
     clearUser: () => void
 }
 
@@ -32,8 +47,10 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
     const [userLoading, setUserLoading] = useState(false)
     const [sleepStatus, setSleepStatus] = useState<SleepStatusData | null>(null)
     const [sleepLoading, setSleepLoading] = useState(false)
+    const [challenges, setChallenges] = useState<CurrentChallenge[] | null>(null)
+    const [challengesLoading, setChallengesLoading] = useState(false)
 
-    const refreshUser = useCallback(async (options?: RefreshUserOptions) => {
+    const refreshUser = useCallback(async (options?: RefreshOptions) => {
         const clearBeforeLoad = options?.clearBeforeLoad ?? true
 
         if (clearBeforeLoad) {
@@ -72,7 +89,7 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
         }
     }, [])
 
-    const refreshSleepStatus = useCallback(async (options?: RefreshUserOptions) => {
+    const refreshSleepStatus = useCallback(async (options?: RefreshOptions) => {
         const clearBeforeLoad = options?.clearBeforeLoad ?? true
 
         if (clearBeforeLoad) {
@@ -100,15 +117,41 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
         setSleepStatus(value)
     }, [])
 
+    const refreshChallenges = useCallback(async (options?: RefreshOptions) => {
+        const clearBeforeLoad = options?.clearBeforeLoad ?? true
+
+        if (clearBeforeLoad) {
+            setChallenges(null)
+        }
+
+        setChallengesLoading(true)
+
+        try {
+            const data = await requestApi<CurrentChallenge[]>({
+                url: '/points/challenges/current',
+                method: 'GET',
+            })
+
+            setChallenges(data)
+            return data
+        } catch {
+            return null
+        } finally {
+            setChallengesLoading(false)
+        }
+    }, [])
+
     const clearUser = useCallback(() => {
         setUser(null)
         setUserLoading(false)
         setSleepStatus(null)
         setSleepLoading(false)
+        setChallenges(null)
+        setChallengesLoading(false)
     }, [])
 
     useEffect(() => {
-        if (pathname === '/sign' || (user && sleepStatus)) {
+        if (pathname === '/sign' || (user && sleepStatus && challenges)) {
             return
         }
 
@@ -123,11 +166,15 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
                 tasks.push(refreshSleepStatus({ clearBeforeLoad: false }))
             }
 
+            if (!challenges) {
+                tasks.push(refreshChallenges({ clearBeforeLoad: false }))
+            }
+
             await Promise.allSettled(tasks)
         }
 
         void run()
-    }, [pathname, refreshUser, refreshSleepStatus, sleepStatus, user])
+    }, [challenges, pathname, refreshChallenges, refreshUser, refreshSleepStatus, sleepStatus, user])
 
     const value = useMemo(
         () => ({
@@ -138,6 +185,9 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
             sleepLoading,
             refreshSleepStatus,
             updateSleepStatus,
+            challenges,
+            challengesLoading,
+            refreshChallenges,
             clearUser,
         }),
         [
@@ -148,6 +198,9 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
             sleepLoading,
             refreshSleepStatus,
             updateSleepStatus,
+            challenges,
+            challengesLoading,
+            refreshChallenges,
             clearUser,
         ]
     )

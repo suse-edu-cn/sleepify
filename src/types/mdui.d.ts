@@ -31,6 +31,14 @@ declare module 'react' {
                 React.HTMLAttributes<HTMLElement>,
                 HTMLElement
             >
+            'mdui-icon-star': React.DetailedHTMLProps<
+                React.HTMLAttributes<HTMLElement>,
+                HTMLElement
+            >
+            'mdui-icon-info': React.DetailedHTMLProps<
+                React.HTMLAttributes<HTMLElement>,
+                HTMLElement
+            >
         }
     }
 }
