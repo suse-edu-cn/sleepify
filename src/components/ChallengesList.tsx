@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { requestApi } from '@/lib/request/client'
 
 type Challenge = {
@@ -42,6 +43,7 @@ function formatEndTime(value: string | null) {
 }
 
 export default function ChallengesList() {
+    const router = useRouter()
     const [challenges, setChallenges] = useState<Challenge[]>([])
     const [loading, setLoading] = useState(true)
 
@@ -78,6 +80,11 @@ export default function ChallengesList() {
                             className="sleepify-card sleepify-challenges-item"
                             clickable={item.status !== 'expired' && item.status !== 'closed'}
                             disabled={item.status === 'expired' || item.status === 'closed'}
+                            onClick={() => {
+                                if (item.status !== 'expired' && item.status !== 'closed') {
+                                    router.push(`/challenges/${item.id}`)
+                                }
+                            }}
                         >
                             <div className="sleepify-challenges-header">
                                 <div className="sleepify-challenges-name">{item.name}</div>

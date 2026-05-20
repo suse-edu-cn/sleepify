@@ -43,6 +43,9 @@ export default function PointsDashboard() {
                                 key={item.id}
                                 className="sleepify-card sleepify-points-challenge-card"
                                 clickable
+                                onClick={() => {
+                                    router.push(`/challenges/${item.id}`)
+                                }}
                             >
                                 <div className="sleepify-points-challenge-header">
                                     <div className="sleepify-points-challenge-name">

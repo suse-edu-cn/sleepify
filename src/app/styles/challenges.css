@@ -81,3 +81,46 @@
     font-size: 14px;
     color: rgba(var(--mdui-color-on-surface), 0.6);
 }
+
+.sleepify-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sleepify-detail-name {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-detail-description {
+    font-size: 14px;
+    color: rgba(var(--mdui-color-on-surface), 0.7);
+    line-height: 1.6;
+}
+
+.sleepify-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sleepify-detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-detail-label {
+    color: rgba(var(--mdui-color-on-surface), 0.6);
+}
+
+.sleepify-detail-actions {
+    display: flex;
+    gap: 10px;
+}
