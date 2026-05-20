@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useUserState } from '@/components/UserStateProvider'
 import '@mdui/icons/info.js'
+import '@mdui/icons/add.js'
 
 export default function PointsDashboard() {
     const router = useRouter()
@@ -77,6 +78,15 @@ export default function PointsDashboard() {
                         </div>
                     </mdui-card>
                 )}
+                <mdui-button
+                    variant="outlined"
+                    icon="add"
+                    onClick={() => {
+                        router.push('/challenges')
+                    }}
+                >
+                    查看所有挑战
+                </mdui-button>
             </div>
         </section>
     )

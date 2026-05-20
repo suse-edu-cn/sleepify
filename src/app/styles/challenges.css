@@ -1,0 +1,83 @@
+.sleepify-challenges-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-challenges-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sleepify-challenges-item {
+    gap: 8px;
+}
+
+.sleepify-challenges-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sleepify-challenges-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(var(--mdui-color-on-surface));
+}
+
+.sleepify-challenges-status {
+    padding: 2px 8px;
+    border-radius: var(--mdui-shape-corner-small);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.sleepify-challenges-status-active {
+    background: rgba(var(--mdui-color-primary), 0.1);
+    color: rgb(var(--mdui-color-primary));
+}
+
+.sleepify-challenges-status-progressing {
+    background: rgba(var(--mdui-color-tertiary), 0.1);
+    color: rgb(var(--mdui-color-tertiary));
+}
+
+.sleepify-challenges-status-closed {
+    background: rgba(var(--mdui-color-on-surface), 0.1);
+    color: rgba(var(--mdui-color-on-surface), 0.6);
+}
+
+.sleepify-challenges-status-expired {
+    background: rgba(var(--mdui-color-error), 0.1);
+    color: rgb(var(--mdui-color-error));
+}
+
+.sleepify-challenges-description {
+    font-size: 14px;
+    color: rgba(var(--mdui-color-on-surface), 0.7);
+    line-height: 1.5;
+}
+
+.sleepify-challenges-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sleepify-challenges-tag {
+    padding: 2px 8px;
+    border-radius: var(--mdui-shape-corner-small);
+    background: rgba(var(--mdui-color-primary), 0.1);
+    color: rgb(var(--mdui-color-primary));
+    font-size: 13px;
+}
+
+.sleepify-challenges-end {
+    font-size: 14px;
+    color: rgba(var(--mdui-color-on-surface), 0.6);
+}
