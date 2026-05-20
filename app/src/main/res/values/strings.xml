@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">睡了么</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_ranking">排行榜</string>
+    <string name="nav_info">我的</string>
+    <string name="sign_in_title">登录</string>
+    <string name="student_number_hint">学号</string>
+    <string name="password_hint">密码</string>
+    <string name="sign_in_button">登录</string>
+    <string name="sign_out_button">退出登录</string>
+    <string name="sleep_status_none">暂无睡眠记录</string>
+    <string name="sleep_start_button">开始睡觉</string>
+    <string name="sleep_in_progress">睡眠中</string>
+    <string name="points_label">积分</string>
+    <string name="ranking_tab_sleep">睡眠排行</string>
+    <string name="ranking_tab_points">积分排行</string>
+    <string name="share_button">分享</string>
+    <string name="version_label">版本</string>
+    <string name="refresh_button">刷新</string>
+    <string name="share_copied">链接已复制到剪贴板</string>
+    <string name="share_url">https://sleepify.crrashh.com</string>
+</resources>
