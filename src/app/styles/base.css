@@ -87,3 +87,24 @@ mdui-dialog::part(description) {
     width: 96px;
     height: 96px;
 }
+
+.sleepify-card {
+    border-radius: var(--mdui-shape-corner-large);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sleepify-card-title {
+    margin: 0;
+    font-size: 0.95rem;
+    color: rgba(var(--mdui-color-on-surface), 0.72);
+}
+
+.sleepify-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
