@@ -1,6 +1,7 @@
 package com.crrashh.sleepify.data.api
 
 import com.crrashh.sleepify.data.api.models.ApiResponse
+import com.crrashh.sleepify.data.api.models.LatestVersionResponse
 import com.crrashh.sleepify.data.api.models.PointsRankingItem
 import com.crrashh.sleepify.data.api.models.SignInRequest
 import com.crrashh.sleepify.data.api.models.SignInResponse
@@ -34,4 +35,7 @@ interface ApiService {
 
     @GET("ranking/points")
     suspend fun getPointsRanking(): ApiResponse<List<PointsRankingItem>>
+
+    @GET("pkg/latest")
+    suspend fun getLatestVersion(): ApiResponse<LatestVersionResponse>
 }
