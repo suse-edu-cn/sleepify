@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import 'mdui/mdui.css'
 
 import './styles/base.css'
@@ -9,12 +9,15 @@ import AppProviders from '@/components/AppProviders'
 import MduiRuntime from '@/components/MduiRuntime'
 import PwaRegister from '@/components/PwaRegister'
 
+export const viewport: Viewport = {
+    themeColor: '#fef7ff',
+}
+
 export const metadata: Metadata = {
     title: '睡了么 Sleepify',
     description: '何导学生的御用小程序，用于对抗 AI 生成的猎奇 App',
     applicationName: 'Sleepify',
     manifest: '/site.webmanifest',
-    themeColor: '#fef7ff',
     appleWebApp: {
         capable: true,
         title: 'Sleepify',
