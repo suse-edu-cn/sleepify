@@ -59,7 +59,7 @@ export async function POST(request: Request) {
             response.cookies.set({
                 name: 'token',
                 value: token,
-                httpOnly: true,
+                httpOnly: false,
                 path: '/',
                 maxAge: 2592000,
                 sameSite: 'lax',
@@ -68,7 +68,7 @@ export async function POST(request: Request) {
             response.cookies.set({
                 name: 'id',
                 value: id,
-                httpOnly: true,
+                httpOnly: false,
                 path: '/',
                 maxAge: 2592000,
                 sameSite: 'lax',
@@ -103,7 +103,7 @@ export function DELETE() {
     response.cookies.set({
         name: 'token',
         value: '',
-        httpOnly: true,
+        httpOnly: false,
         path: '/',
         maxAge: 0,
         sameSite: 'lax',
@@ -112,7 +112,7 @@ export function DELETE() {
     response.cookies.set({
         name: 'id',
         value: '',
-        httpOnly: true,
+        httpOnly: false,
         path: '/',
         maxAge: 0,
         sameSite: 'lax',

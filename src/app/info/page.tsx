@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import '../styles/info.css'
 import { useRouter } from 'next/navigation'
+import { confirm } from 'mdui/functions/confirm.js'
 import { snackbar } from 'mdui/functions/snackbar.js'
 import { useUserState } from '@/components/UserStateProvider'
 import { requestApi } from '@/lib/request/client'
@@ -52,6 +53,13 @@ export default function InfoPage() {
             setSigningOut(false)
             router.replace('/sign')
         }
+    }
+
+    const onLocalSignOut = () => {
+        document.cookie = 'token=; path=/; max-age=0'
+        document.cookie = 'id=; path=/; max-age=0'
+        clearUser()
+        router.replace('/sign')
     }
 
     const onShare = async () => {
@@ -149,7 +157,19 @@ export default function InfoPage() {
                 loading={signingOut}
                 disabled={signingOut}
                 onClick={() => {
-                    void onSignOut()
+                    confirm({
+                        headline: '退出登录',
+                        description: '是否下线其它已登录的设备？\n\n注：这可能会导致自动打卡功能失效。',
+                        closeOnOverlayClick: true,
+                        confirmText: '确认下线',
+                        cancelText: '取消',
+                        onConfirm: () => {
+                            void onSignOut()
+                        },
+                        onCancel: () => {
+                            onLocalSignOut()
+                        },
+                    }).catch(() => {})
                 }}
                 suppressHydrationWarning
             >

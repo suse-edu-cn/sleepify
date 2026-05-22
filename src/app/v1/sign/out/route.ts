@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         response.cookies.set({
             name: 'token',
             value: '',
-            httpOnly: true,
+            httpOnly: false,
             path: '/',
             maxAge: 0,
             sameSite: 'lax',
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         response.cookies.set({
             name: 'id',
             value: '',
-            httpOnly: true,
+            httpOnly: false,
             path: '/',
             maxAge: 0,
             sameSite: 'lax',
