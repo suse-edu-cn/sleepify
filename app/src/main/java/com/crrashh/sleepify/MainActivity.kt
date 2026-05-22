@@ -6,8 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,6 +45,32 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val isLoggedIn by container.tokenDataStore.isLoggedIn.collectAsState(initial = false)
                 val startDestination = if (isLoggedIn) Screen.Home.route else Screen.SignIn.route
+
+                var showTokenExpiredDialog by remember { mutableStateOf(false) }
+
+                LaunchedEffect(Unit) {
+                    container.tokenExpired.collect {
+                        showTokenExpiredDialog = true
+                    }
+                }
+
+                if (showTokenExpiredDialog) {
+                    AlertDialog(
+                        onDismissRequest = {},
+                        title = { Text("提示") },
+                        text = { Text("登录信息已失效") },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showTokenExpiredDialog = false
+                                navController.navigate(Screen.SignIn.route) {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }) {
+                                Text("重新登录")
+                            }
+                        }
+                    )
+                }
 
                 val tabOrder = mapOf(
                     Screen.Home.route to 0,

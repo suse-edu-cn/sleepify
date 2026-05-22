@@ -12,6 +12,8 @@ import com.crrashh.sleepify.data.repository.SleepRepository
 import com.crrashh.sleepify.data.repository.UserRepository
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -26,6 +28,9 @@ class AppContainer(private val context: Context) {
     val tokenDataStore = TokenDataStore(context)
     private val gson = Gson()
     private val mainHandler = Handler(Looper.getMainLooper())
+
+    private val _tokenExpired = MutableSharedFlow<Unit>()
+    val tokenExpired = _tokenExpired.asSharedFlow()
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -57,10 +62,15 @@ class AppContainer(private val context: Context) {
 
             try {
                 val json = gson.fromJson(bodyString, JsonObject::class.java)
-                if (json.has("code") && json.get("code").asInt != 0) {
-                    val message = json.get("message")?.asString ?: "未知错误"
-                    mainHandler.post {
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                if (json.has("code")) {
+                    val code = json.get("code").asInt
+                    if (code == 1001 || code == 1002) {
+                        runBlocking { _tokenExpired.emit(Unit) }
+                    } else if (code != 0) {
+                        val message = json.get("message")?.asString ?: "未知错误"
+                        mainHandler.post {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             } catch (_: Exception) {}
