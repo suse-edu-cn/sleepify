@@ -42,7 +42,7 @@ class AppContainer(context: Context) {
         .build()
 
     private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://sleepify.crrashh.com/")
+        .baseUrl("https://sleepify.crrashh.com/v1/")
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
