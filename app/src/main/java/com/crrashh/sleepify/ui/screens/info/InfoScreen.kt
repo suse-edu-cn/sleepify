@@ -42,6 +42,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.crrashh.sleepify.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -121,7 +122,12 @@ fun InfoScreen(
                     scope.launch { snackbarHostState.showSnackbar("链接已复制到剪贴板") }
                 }
             )
-            InfoListItem(icon = Icons.Default.Info, key = "版本", value = "0.2.0")
+            InfoListItem(
+                icon = Icons.Default.Info,
+                key = "版本",
+                value = BuildConfig.VERSION_NAME,
+                onClick = { viewModel.checkForUpdate() }
+            )
 
             // Sign out
             Button(

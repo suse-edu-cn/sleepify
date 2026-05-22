@@ -37,6 +37,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
         viewBinding = false
     }
     compileSdkMinor = 1
