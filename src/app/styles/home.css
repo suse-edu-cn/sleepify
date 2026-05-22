@@ -53,3 +53,22 @@
     font-size: 0.9rem;
     color: rgba(var(--mdui-color-on-surface), 0.75);
 }
+
+.sleepify-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    text-align: center;
+}
+
+.sleepify-stats-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: rgb(var(--mdui-color-primary));
+}
+
+.sleepify-stats-label {
+    font-size: 13px;
+    color: rgba(var(--mdui-color-on-surface), 0.6);
+    margin-top: 4px;
+}
