@@ -25,6 +25,23 @@ type CurrentChallenge = {
     status: string
 }
 
+type SleepRankingItem = {
+    id: string
+    name: string
+    class_name: string
+    weekly_sleep_days: number
+    monthly_sleep_days: number
+    max_continuous_days: number
+    last_sleep: string
+}
+
+type PointsRankingItem = {
+    id: string
+    name: string
+    class_name: string
+    points: number
+}
+
 type UserStateContextValue = {
     user: UserInfo | null
     userLoading: boolean
@@ -33,6 +50,12 @@ type UserStateContextValue = {
     sleepLoading: boolean
     refreshSleepStatus: (options?: RefreshOptions) => Promise<SleepStatusData | null>
     updateSleepStatus: (value: SleepStatusData | null) => void
+    sleepRanking: SleepRankingItem[] | null
+    sleepRankingLoading: boolean
+    refreshSleepRanking: (options?: RefreshOptions) => Promise<SleepRankingItem[] | null>
+    pointsRanking: PointsRankingItem[] | null
+    pointsRankingLoading: boolean
+    refreshPointsRanking: (options?: RefreshOptions) => Promise<PointsRankingItem[] | null>
     challenges: CurrentChallenge[] | null
     challengesLoading: boolean
     refreshChallenges: (options?: RefreshOptions) => Promise<CurrentChallenge[] | null>
@@ -47,6 +70,10 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
     const [userLoading, setUserLoading] = useState(false)
     const [sleepStatus, setSleepStatus] = useState<SleepStatusData | null>(null)
     const [sleepLoading, setSleepLoading] = useState(false)
+    const [sleepRanking, setSleepRanking] = useState<SleepRankingItem[] | null>(null)
+    const [sleepRankingLoading, setSleepRankingLoading] = useState(false)
+    const [pointsRanking, setPointsRanking] = useState<PointsRankingItem[] | null>(null)
+    const [pointsRankingLoading, setPointsRankingLoading] = useState(false)
     const [challenges, setChallenges] = useState<CurrentChallenge[] | null>(null)
     const [challengesLoading, setChallengesLoading] = useState(false)
 
@@ -117,6 +144,54 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
         setSleepStatus(value)
     }, [])
 
+    const refreshSleepRanking = useCallback(async (options?: RefreshOptions) => {
+        const clearBeforeLoad = options?.clearBeforeLoad ?? true
+
+        if (clearBeforeLoad) {
+            setSleepRanking(null)
+        }
+
+        setSleepRankingLoading(true)
+
+        try {
+            const data = await requestApi<SleepRankingItem[]>({
+                url: '/sleep/ranking',
+                method: 'GET',
+            })
+
+            setSleepRanking(data)
+            return data
+        } catch {
+            return null
+        } finally {
+            setSleepRankingLoading(false)
+        }
+    }, [])
+
+    const refreshPointsRanking = useCallback(async (options?: RefreshOptions) => {
+        const clearBeforeLoad = options?.clearBeforeLoad ?? true
+
+        if (clearBeforeLoad) {
+            setPointsRanking(null)
+        }
+
+        setPointsRankingLoading(true)
+
+        try {
+            const data = await requestApi<PointsRankingItem[]>({
+                url: '/points/ranking',
+                method: 'GET',
+            })
+
+            setPointsRanking(data)
+            return data
+        } catch {
+            return null
+        } finally {
+            setPointsRankingLoading(false)
+        }
+    }, [])
+
     const refreshChallenges = useCallback(async (options?: RefreshOptions) => {
         const clearBeforeLoad = options?.clearBeforeLoad ?? true
 
@@ -146,12 +221,16 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
         setUserLoading(false)
         setSleepStatus(null)
         setSleepLoading(false)
+        setSleepRanking(null)
+        setSleepRankingLoading(false)
+        setPointsRanking(null)
+        setPointsRankingLoading(false)
         setChallenges(null)
         setChallengesLoading(false)
     }, [])
 
     useEffect(() => {
-        if (pathname === '/sign' || (user && sleepStatus && challenges)) {
+        if (pathname === '/sign' || (user && sleepStatus && sleepRanking && pointsRanking && challenges)) {
             return
         }
 
@@ -166,6 +245,14 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
                 tasks.push(refreshSleepStatus({ clearBeforeLoad: false }))
             }
 
+            if (!sleepRanking) {
+                tasks.push(refreshSleepRanking({ clearBeforeLoad: false }))
+            }
+
+            if (!pointsRanking) {
+                tasks.push(refreshPointsRanking({ clearBeforeLoad: false }))
+            }
+
             if (!challenges) {
                 tasks.push(refreshChallenges({ clearBeforeLoad: false }))
             }
@@ -174,7 +261,7 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
         }
 
         void run()
-    }, [challenges, pathname, refreshChallenges, refreshUser, refreshSleepStatus, sleepStatus, user])
+    }, [challenges, pathname, refreshChallenges, refreshPointsRanking, refreshSleepRanking, refreshUser, refreshSleepStatus, pointsRanking, sleepRanking, sleepStatus, user])
 
     const value = useMemo(
         () => ({
@@ -185,6 +272,12 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
             sleepLoading,
             refreshSleepStatus,
             updateSleepStatus,
+            sleepRanking,
+            sleepRankingLoading,
+            refreshSleepRanking,
+            pointsRanking,
+            pointsRankingLoading,
+            refreshPointsRanking,
             challenges,
             challengesLoading,
             refreshChallenges,
@@ -198,6 +291,12 @@ export function UserStateProvider({ children }: { children: ReactNode }) {
             sleepLoading,
             refreshSleepStatus,
             updateSleepStatus,
+            sleepRanking,
+            sleepRankingLoading,
+            refreshSleepRanking,
+            pointsRanking,
+            pointsRankingLoading,
+            refreshPointsRanking,
             challenges,
             challengesLoading,
             refreshChallenges,

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { requestApi } from '@/lib/request/client'
 import { useUserState } from '@/components/UserStateProvider'
 
@@ -40,44 +40,23 @@ export default function HomeDashboard() {
         sleepLoading,
         refreshSleepStatus,
         updateSleepStatus,
+        sleepRanking,
+        sleepRankingLoading,
     } = useUserState()
     const [startingSleep, setStartingSleep] = useState(false)
     const [nowMs, setNowMs] = useState(() => Date.now())
-    const [stats, setStats] = useState<{
-        weekly_sleep_days: number
-        monthly_sleep_days: number
-        max_continuous_days: number
-    } | null>(null)
-    const [statsLoading, setStatsLoading] = useState(true)
 
-    const fetchStats = useCallback(async () => {
-        setStatsLoading(true)
-
-        try {
-            const data = await requestApi<
-                {
-                    id: string
-                    weekly_sleep_days: number
-                    monthly_sleep_days: number
-                    max_continuous_days: number
-                }[]
-            >({
-                url: '/sleep/ranking',
-                method: 'GET',
-            })
-
-            const mine = data.find((item) => item.id === user?.id)
-            if (mine) {
-                setStats({
-                    weekly_sleep_days: mine.weekly_sleep_days,
-                    monthly_sleep_days: mine.monthly_sleep_days,
-                    max_continuous_days: mine.max_continuous_days,
-                })
-            }
-        } finally {
-            setStatsLoading(false)
+    const stats = useMemo(() => {
+        const mine = sleepRanking?.find((item) => item.id === user?.id)
+        if (!mine) {
+            return null
         }
-    }, [user?.id])
+        return {
+            weekly_sleep_days: mine.weekly_sleep_days,
+            monthly_sleep_days: mine.monthly_sleep_days,
+            max_continuous_days: mine.max_continuous_days,
+        }
+    }, [sleepRanking, user?.id])
 
     useEffect(() => {
         const timer = window.setInterval(() => {
@@ -88,10 +67,6 @@ export default function HomeDashboard() {
             window.clearInterval(timer)
         }
     }, [])
-
-    useEffect(() => {
-        void fetchStats()
-    }, [fetchStats])
 
     const sleepContent = useMemo(() => {
         if (sleepLoading) {
@@ -210,7 +185,7 @@ export default function HomeDashboard() {
 
             <mdui-card className="sleepify-card">
                 <h2 className="sleepify-card-title">睡眠统计</h2>
-                {statsLoading ? (
+                {sleepRankingLoading ? (
                     <mdui-circular-progress />
                 ) : stats ? (
                     <div className="sleepify-stats-grid">
