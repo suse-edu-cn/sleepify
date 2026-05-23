@@ -64,6 +64,10 @@ fun InfoScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
+    LaunchedEffect(Unit) {
+        viewModel.refresh()
+    }
+
     LaunchedEffect(uiState.signOutSuccess) {
         if (uiState.signOutSuccess) onSignOut()
     }
