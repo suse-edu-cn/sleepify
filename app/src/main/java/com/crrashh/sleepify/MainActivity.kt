@@ -60,8 +60,8 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                LaunchedEffect(Unit) {
-                    infoVm.checkForUpdate()
+                LaunchedEffect(isLoggedIn) {
+                    if (isLoggedIn) infoVm.checkForUpdate()
                 }
 
                 if (showTokenExpiredDialog) {
