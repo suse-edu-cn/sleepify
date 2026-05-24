@@ -143,7 +143,7 @@ export default function AutoSleepCard() {
                         disabled={saving}
                         clearable={false}
                         variant='outlined'
-                        onChange={(e: Event) => {
+                        onChange={(e: React.ChangeEvent<HTMLElement>) => {
                             const target = e.target as HTMLSelectElement
                             setDraftConfig({
                                 ...draftConfig,
