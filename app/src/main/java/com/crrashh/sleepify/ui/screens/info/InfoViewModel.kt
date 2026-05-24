@@ -38,6 +38,7 @@ class InfoViewModel(
     }
 
     fun refresh() {
+        if (_uiState.value.userInfo != null) return
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             userRepository.getUserInfo()
