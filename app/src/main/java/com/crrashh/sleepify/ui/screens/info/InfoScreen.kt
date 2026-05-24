@@ -1,8 +1,7 @@
 package com.crrashh.sleepify.ui.screens.info
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,8 +32,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -42,7 +39,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import com.crrashh.sleepify.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,9 +57,7 @@ fun InfoScreen(
     viewModel: InfoViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.refresh()
@@ -127,17 +121,15 @@ fun InfoScreen(
             // About items
             InfoListItem(
                 icon = Icons.Default.Share,
-                key = "分享给好友",
+                key = "开放源代码",
                 onClick = {
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    clipboard.setPrimaryClip(ClipData.newPlainText("sleepify_url", "https://sleepify.crrashh.com"))
-                    scope.launch { snackbarHostState.showSnackbar("链接已复制到剪贴板") }
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/suse-edu-cn/sleepify/tree/compose/main")))
                 }
             )
             InfoListItem(
                 icon = Icons.Default.Info,
                 key = "版本",
-                value = BuildConfig.VERSION_NAME,
+                value = "v${BuildConfig.VERSION_NAME}",
                 onClick = { viewModel.checkForUpdate() }
             )
 
@@ -158,7 +150,6 @@ fun InfoScreen(
             }
         }
 
-        SnackbarHost(hostState = snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
