@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import android.widget.Toast
 import com.crrashh.sleepify.data.api.models.LatestVersionResponse
 import com.crrashh.sleepify.data.api.models.UserInfoResponse
+import com.crrashh.sleepify.data.local.TokenDataStore
 import com.crrashh.sleepify.data.repository.AuthRepository
 import com.crrashh.sleepify.data.repository.PackageRepository
 import com.crrashh.sleepify.data.repository.UserRepository
@@ -27,7 +28,8 @@ data class InfoUiState(
 class InfoViewModel(
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository,
-    private val packageRepository: PackageRepository
+    private val packageRepository: PackageRepository,
+    private val tokenDataStore: TokenDataStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(InfoUiState())
@@ -40,6 +42,7 @@ class InfoViewModel(
     fun refresh() {
         if (_uiState.value.userInfo != null) return
         viewModelScope.launch {
+            if (tokenDataStore.getTokenBlocking().isNullOrBlank()) return@launch
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             userRepository.getUserInfo()
                 .onSuccess { info ->
@@ -116,11 +119,12 @@ class InfoViewModel(
         fun factory(
             userRepository: UserRepository,
             authRepository: AuthRepository,
-            packageRepository: PackageRepository
+            packageRepository: PackageRepository,
+            tokenDataStore: TokenDataStore
         ) = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return InfoViewModel(userRepository, authRepository, packageRepository) as T
+                return InfoViewModel(userRepository, authRepository, packageRepository, tokenDataStore) as T
             }
         }
     }

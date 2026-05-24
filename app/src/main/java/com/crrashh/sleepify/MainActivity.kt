@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 var showTokenExpiredDialog by remember { mutableStateOf(false) }
 
                 val infoVm: InfoViewModel = viewModel(
-                    factory = InfoViewModel.factory(container.userRepository, container.authRepository, container.packageRepository)
+                    factory = InfoViewModel.factory(container.userRepository, container.authRepository, container.packageRepository, container.tokenDataStore)
                 )
 
                 LaunchedEffect(Unit) {
