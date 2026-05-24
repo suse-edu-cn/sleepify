@@ -3,6 +3,7 @@ package com.crrashh.sleepify.ui.screens.info
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import android.widget.Toast
 import com.crrashh.sleepify.data.api.models.LatestVersionResponse
 import com.crrashh.sleepify.data.api.models.UserInfoResponse
 import com.crrashh.sleepify.data.repository.AuthRepository
@@ -19,7 +20,8 @@ data class InfoUiState(
     val error: String? = null,
     val isSigningOut: Boolean = false,
     val signOutSuccess: Boolean = false,
-    val latestVersion: LatestVersionResponse? = null
+    val latestVersion: LatestVersionResponse? = null,
+    val updateMessage: String? = null
 )
 
 class InfoViewModel(
@@ -62,18 +64,51 @@ class InfoViewModel(
         }
     }
 
+    private var lastCheckTime = 0L
+    private var hasUpdate = false
+    private val throttleMs = 20 * 60 * 1000L
+
+    fun autoCheckForUpdate() {
+        val now = System.currentTimeMillis()
+        if (now - lastCheckTime < throttleMs) return
+        lastCheckTime = now
+        viewModelScope.launch {
+            packageRepository.getLatestVersion()
+                .onSuccess { latest ->
+                    hasUpdate = latest != null
+                    _uiState.value = _uiState.value.copy(latestVersion = latest)
+                }
+        }
+    }
+
     fun checkForUpdate() {
+        val now = System.currentTimeMillis()
+        if (now - lastCheckTime < throttleMs) {
+            if (!hasUpdate) {
+                _uiState.value = _uiState.value.copy(updateMessage = "当前已是新版本")
+            }
+            return
+        }
+        lastCheckTime = now
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(latestVersion = null)
             packageRepository.getLatestVersion()
                 .onSuccess { latest ->
-                    _uiState.value = _uiState.value.copy(latestVersion = latest)
+                    hasUpdate = latest != null
+                    _uiState.value = _uiState.value.copy(
+                        latestVersion = latest,
+                        updateMessage = if (latest == null) "当前已是新版本" else null
+                    )
                 }
         }
     }
 
     fun dismissUpdate() {
         _uiState.value = _uiState.value.copy(latestVersion = null)
+    }
+
+    fun clearUpdateMessage() {
+        _uiState.value = _uiState.value.copy(updateMessage = null)
     }
 
     companion object {

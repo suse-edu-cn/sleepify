@@ -36,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -70,6 +71,13 @@ fun InfoScreen(
 
     LaunchedEffect(uiState.signOutSuccess) {
         if (uiState.signOutSuccess) onSignOut()
+    }
+
+    LaunchedEffect(uiState.updateMessage) {
+        uiState.updateMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearUpdateMessage()
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
