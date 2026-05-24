@@ -1,6 +1,7 @@
 import { Buffer } from 'node:buffer'
 import axios from 'axios'
 import { z } from 'zod'
+import { setConfig } from '@/lib/db'
 import { fail, internalError, success } from '@/lib/server/api'
 import { upstream } from '@/lib/server/upstream'
 
@@ -53,6 +54,8 @@ export async function POST(request: Request) {
             if (!token || !id) {
                 return internalError()
             }
+
+            setConfig('token', token)
 
             const response = success({ token, id })
 

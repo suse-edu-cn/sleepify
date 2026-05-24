@@ -4,7 +4,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { requestApi } from '@/lib/request/client'
 import { useUserState } from '@/components/UserStateProvider'
 
+import 'mdui/components/button.js'
+import 'mdui/components/circular-progress.js'
+import 'mdui/components/linear-progress.js'
 import '@mdui/icons/access-time.js'
+import '@mdui/icons/refresh.js'
 import '@mdui/icons/warning-amber.js'
 import '@mdui/icons/bedtime.js'
 
@@ -33,30 +37,15 @@ function getTimeStr(totalMinutes: number) {
     return `${hours} 小时 ${minutes} 分钟`
 }
 
-export default function HomeDashboard() {
+export default function SleepStatusCard() {
     const {
-        user,
         sleepStatus,
         sleepLoading,
         refreshSleepStatus,
         updateSleepStatus,
-        sleepRanking,
-        sleepRankingLoading,
     } = useUserState()
     const [startingSleep, setStartingSleep] = useState(false)
     const [nowMs, setNowMs] = useState(() => Date.now())
-
-    const stats = useMemo(() => {
-        const mine = sleepRanking?.find((item) => item.id === user?.id)
-        if (!mine) {
-            return null
-        }
-        return {
-            weekly_sleep_days: mine.weekly_sleep_days,
-            monthly_sleep_days: mine.monthly_sleep_days,
-            max_continuous_days: mine.max_continuous_days,
-        }
-    }, [sleepRanking, user?.id])
 
     useEffect(() => {
         const timer = window.setInterval(() => {
@@ -164,51 +153,22 @@ export default function HomeDashboard() {
     }, [nowMs, sleepLoading, sleepStatus, startingSleep, updateSleepStatus])
 
     return (
-        <section className="sleepify-page">
-            <mdui-card className="sleepify-card">
-                <div className="sleepify-card-title-row">
-                    <h2 className="sleepify-card-title">睡眠状态</h2>
-                    <button
-                        type="button"
-                        className="sleepify-refresh-btn"
-                        aria-label="刷新睡眠状态"
-                        disabled={sleepLoading || startingSleep}
-                        onClick={() => {
-                            void refreshSleepStatus({ clearBeforeLoad: true })
-                        }}
-                    >
-                        <mdui-icon-refresh />
-                    </button>
-                </div>
-                {sleepContent}
-            </mdui-card>
-
-            <mdui-card className="sleepify-card">
-                <h2 className="sleepify-card-title">睡眠统计</h2>
-                {sleepRankingLoading ? (
-                    <mdui-circular-progress />
-                ) : stats ? (
-                    <div className="sleepify-stats-grid">
-                        <div className="sleepify-stats-item">
-                            <div className="sleepify-stats-value">{stats.weekly_sleep_days}</div>
-                            <div className="sleepify-stats-label">本周睡眠天数</div>
-                        </div>
-                        <div className="sleepify-stats-item">
-                            <div className="sleepify-stats-value">{stats.monthly_sleep_days}</div>
-                            <div className="sleepify-stats-label">本月睡眠天数</div>
-                        </div>
-                        <div className="sleepify-stats-item">
-                            <div className="sleepify-stats-value">{stats.max_continuous_days}</div>
-                            <div className="sleepify-stats-label">最大连续天数</div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="sleepify-card-sleep-status">
-                        <mdui-icon-warning-amber />
-                        暂未获取到睡眠统计。
-                    </div>
-                )}
-            </mdui-card>
-        </section>
+        <mdui-card className="sleepify-card">
+            <div className="sleepify-card-title-row">
+                <h2 className="sleepify-card-title">睡眠状态</h2>
+                <button
+                    type="button"
+                    className="sleepify-refresh-btn"
+                    aria-label="刷新睡眠状态"
+                    disabled={sleepLoading || startingSleep}
+                    onClick={() => {
+                        void refreshSleepStatus({ clearBeforeLoad: true })
+                    }}
+                >
+                    <mdui-icon-refresh />
+                </button>
+            </div>
+            {sleepContent}
+        </mdui-card>
     )
 }

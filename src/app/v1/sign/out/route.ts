@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { NextResponse } from 'next/server'
+import { removeConfig } from '@/lib/db'
 import { fail, internalError, success } from '@/lib/server/api'
 import { getAuthHeader, isInvalidTokenError, upstream } from '@/lib/server/upstream'
 
@@ -56,9 +57,11 @@ export async function POST(request: Request) {
             }
         )
 
+        removeConfig('token')
         return clearCookies(success({}))
     } catch (error) {
         if (isInvalidTokenError(error)) {
+            removeConfig('token')
             return clearCookies(fail(1002, '登录状态无效'))
         }
 

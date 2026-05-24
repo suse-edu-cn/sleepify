@@ -72,3 +72,61 @@
     color: rgba(var(--mdui-color-on-surface), 0.6);
     margin-top: 4px;
 }
+
+.sleepify-auto-sleep-config {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sleepify-auto-sleep-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgb(var(--mdui-color-primary));
+}
+
+.sleepify-time-picker-trigger {
+    border: none;
+    appearance: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 4px 12px;
+    margin: 0 6px;
+    border-radius: var(--mdui-shape-corner-small);
+    transition: background-color 160ms ease;
+    background-color: rgb(var(--mdui-color-secondary-container-light));
+    text-align: center;
+}
+
+option {
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.sleepify-time-picker-trigger:hover {
+    background: rgba(var(--mdui-color-primary), 0.1);
+}
+
+.sleepify-time-separator {
+    margin: 0 2px;
+}
+
+.sleepify-auto-sleep-days {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sleepify-auto-sleep-days mdui-button {
+    min-width: 40px;
+}
+
+.sleepify-auto-sleep-actions {
+    display: flex;
+    justify-content: flex-end;
+}
