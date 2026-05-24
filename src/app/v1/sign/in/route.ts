@@ -1,41 +1,46 @@
 import { Buffer } from 'node:buffer'
 import axios from 'axios'
 import { z } from 'zod'
-import { setConfig } from '@/lib/db'
+import { getConfig, setConfig } from '@/lib/db'
+import { decrypt } from '@/lib/crypto/ecc'
 import { fail, internalError, success } from '@/lib/server/api'
 import { upstream } from '@/lib/server/upstream'
+
+const payloadSchema = z.object({
+    payload: z.string(),
+})
 
 const signBodySchema = z.object({
     username: z.string(),
     password: z.string(),
 })
 
-function decodeBase64(input: string) {
-    try {
-        const decoded = Buffer.from(input, 'base64').toString('utf-8')
-
-        if (!decoded) {
-            return null
-        }
-
-        return decoded
-    } catch {
-        return null
-    }
-}
-
 export async function POST(request: Request) {
     try {
         const rawBody = await request.json().catch(() => null)
-        const parsed = signBodySchema.safeParse(rawBody)
+        const payloadParsed = payloadSchema.safeParse(rawBody)
 
-        if (!parsed.success) {
+        if (!payloadParsed.success) {
             return fail(1000, '请求内容错误')
         }
 
-        const decodedPassword = decodeBase64(parsed.data.password)
+        const privateKey = getConfig('ecc_private_key')
+        if (!privateKey) {
+            return fail(5000, '服务器未初始化')
+        }
 
-        if (!decodedPassword) {
+        let decryptedJson: string
+        try {
+            const decryptedBytes = await decrypt(payloadParsed.data.payload, privateKey)
+            decryptedJson = new TextDecoder().decode(decryptedBytes)
+        } catch (e) {
+            console.error('[sign/in] ECC decrypt failed:', e)
+            return fail(1000, '请求内容错误')
+        }
+
+        const parsed = signBodySchema.safeParse(JSON.parse(decryptedJson))
+
+        if (!parsed.success) {
             return fail(1000, '请求内容错误')
         }
 
@@ -45,7 +50,7 @@ export async function POST(request: Request) {
                 user: { student_data: { id: string } }
             }>('/auth/login/', {
                 username: parsed.data.username,
-                password: decodedPassword,
+                password: Buffer.from(parsed.data.password, 'base64').toString('utf-8'),
             })
 
             const token = upstreamResponse.data.token

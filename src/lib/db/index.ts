@@ -1,7 +1,14 @@
 import Database from 'better-sqlite3'
 import path from 'node:path'
+import fs from 'node:fs'
+import { generateKeyPair } from '@/lib/crypto/ecc'
 
-const dbPath = path.join(process.cwd(), 'data', 'sleepify.db')
+const dataDir = path.join(process.cwd(), 'data')
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true })
+}
+
+const dbPath = path.join(dataDir, 'sleepify.db')
 const db = new Database(dbPath)
 
 db.exec(`
@@ -24,4 +31,11 @@ export function setConfig(key: string, value: string) {
 
 export function removeConfig(key: string) {
     db.prepare('DELETE FROM config WHERE key = ?').run(key)
+}
+
+if (!getConfig('ecc_private_key')) {
+    const { privateKey, publicKey } = generateKeyPair()
+    setConfig('ecc_private_key', privateKey)
+    setConfig('ecc_public_key', publicKey)
+    console.log('[db] ECC 密钥对已生成')
 }

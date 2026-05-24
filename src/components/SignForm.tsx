@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { snackbar } from 'mdui/functions/snackbar.js'
 import { requestApi } from '@/lib/request/client'
+import { encrypt } from '@/lib/crypto/ecc'
 
 const signSchema = z.object({
     username: z.string().min(9, '用户名长度必须大于 8').regex(/^\d+$/, '用户名必须为纯数字'),
@@ -60,13 +61,32 @@ export default function SignForm() {
         setSubmitting(true)
 
         try {
+            const { publicKey } = await requestApi<{ publicKey: string }>({
+                url: '/sign/key',
+                method: 'GET',
+            })
+
+            const plaintext = JSON.stringify({
+                username,
+                password: encodeBase64(password),
+            })
+
+            let payload: string
+            try {
+                payload = await encrypt(
+                    new TextEncoder().encode(plaintext),
+                    publicKey
+                )
+            } catch (e) {
+                console.error('[sign] encrypt failed:', e)
+                snackbar({ message: '加密失败', closeable: true, placement: 'top' })
+                return
+            }
+
             await requestApi<{ token: string; id: string }>({
                 url: '/sign/in',
                 method: 'POST',
-                data: {
-                    username,
-                    password: encodeBase64(password),
-                },
+                data: { payload },
             })
 
             // 登录成功后替换路由到首页

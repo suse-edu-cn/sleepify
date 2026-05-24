@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1'
+const CACHE_VERSION = 'v2'
 const STATIC_CACHE = `sleepify-static-${CACHE_VERSION}`
 const RUNTIME_CACHE = `sleepify-runtime-${CACHE_VERSION}`
 const RUNTIME_MAX_ENTRIES = 80
@@ -73,7 +73,7 @@ self.addEventListener('fetch', (event) => {
     }
 
     if (isImmutableAsset(url.pathname)) {
-        event.respondWith(cacheFirst(request))
+        event.respondWith(staleWhileRevalidate(event, request))
         return
     }
 
