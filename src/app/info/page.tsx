@@ -177,9 +177,13 @@ export default function InfoPage() {
             </mdui-button>
 
             <p className="sleepify-info-motto">
-                才发现关于梦的答案&nbsp;&nbsp;&nbsp;一直在自己手上
+                若你我相逢在人海里&nbsp;&nbsp;&nbsp;请你送我一束花
                 <br />
-                只有自己能&nbsp;&nbsp;&nbsp;让自己发光
+                我想要成为一名&nbsp;&nbsp;&nbsp;艺术家
+            </p>
+
+            <p className="sleepify-info-copyright">
+                &copy; 2026 crrashh1542.
             </p>
         </section>
     )

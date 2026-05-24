@@ -25,3 +25,9 @@
     color: rgb(var(--mdui-color-on-primary-dark));
     line-height: 2.25;
 }
+
+.sleepify-info-copyright {
+    text-align: center;
+    color: #666;
+    font-size: 15px;
+}
