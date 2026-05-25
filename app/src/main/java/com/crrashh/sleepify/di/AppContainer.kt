@@ -8,6 +8,7 @@ import com.crrashh.sleepify.data.api.ApiService
 import com.crrashh.sleepify.data.local.TokenDataStore
 import com.crrashh.sleepify.data.repository.AuthRepository
 import com.crrashh.sleepify.data.repository.PackageRepository
+import com.crrashh.sleepify.data.repository.PointsRepository
 import com.crrashh.sleepify.data.repository.RankingRepository
 import com.crrashh.sleepify.data.repository.SleepRepository
 import com.crrashh.sleepify.data.repository.UserRepository
@@ -94,5 +95,6 @@ class AppContainer(private val context: Context) {
     val userRepository = UserRepository(apiService)
     val sleepRepository = SleepRepository(apiService)
     val rankingRepository = RankingRepository(apiService)
+    val pointsRepository = PointsRepository(apiService)
     val packageRepository = PackageRepository(apiService)
 }

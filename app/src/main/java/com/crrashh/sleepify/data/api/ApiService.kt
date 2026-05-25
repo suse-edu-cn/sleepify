@@ -1,7 +1,11 @@
 package com.crrashh.sleepify.data.api
 
 import com.crrashh.sleepify.data.api.models.ApiResponse
+import com.crrashh.sleepify.data.api.models.Challenge
+import com.crrashh.sleepify.data.api.models.ChallengeDetail
+import com.crrashh.sleepify.data.api.models.CurrentChallenge
 import com.crrashh.sleepify.data.api.models.LatestVersionResponse
+import com.crrashh.sleepify.data.api.models.PointsHistoryItem
 import com.crrashh.sleepify.data.api.models.PointsRankingItem
 import com.crrashh.sleepify.data.api.models.SignInRequest
 import com.crrashh.sleepify.data.api.models.SignInResponse
@@ -12,6 +16,7 @@ import com.crrashh.sleepify.data.api.models.UserInfoResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -30,11 +35,26 @@ interface ApiService {
     @GET("sleep/status")
     suspend fun getSleepStatus(): ApiResponse<SleepStatusResponse>
 
-    @GET("ranking/sleep")
+    @GET("sleep/ranking")
     suspend fun getSleepRanking(): ApiResponse<List<SleepRankingItem>>
 
-    @GET("ranking/points")
+    @GET("points/ranking")
     suspend fun getPointsRanking(): ApiResponse<List<PointsRankingItem>>
+
+    @GET("points/challenges/current")
+    suspend fun getCurrentChallenges(): ApiResponse<List<CurrentChallenge>>
+
+    @GET("points/history")
+    suspend fun getPointsHistory(): ApiResponse<List<PointsHistoryItem>>
+
+    @GET("points/challenges")
+    suspend fun getChallenges(): ApiResponse<List<Challenge>>
+
+    @GET("points/challenges/{id}")
+    suspend fun getChallengeDetail(@Path("id") id: String): ApiResponse<ChallengeDetail>
+
+    @POST("points/challenges/{id}")
+    suspend fun enrollChallenge(@Path("id") id: String): ApiResponse<Any?>
 
     @GET("pkg/latest")
     suspend fun getLatestVersion(): ApiResponse<LatestVersionResponse>

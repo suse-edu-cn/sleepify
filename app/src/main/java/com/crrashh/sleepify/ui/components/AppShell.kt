@@ -47,6 +47,7 @@ fun AppShell(
                         val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
                         NavigationBarItem(
                             selected = selected,
+                            alwaysShowLabel = false,
                             onClick = {
                                 navController.navigate(screen.route) {
                                     popUpTo(Screen.Home.route) { saveState = true }

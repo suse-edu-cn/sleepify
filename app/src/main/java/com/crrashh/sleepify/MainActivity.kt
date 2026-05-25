@@ -18,15 +18,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.crrashh.sleepify.ui.components.AppShell
 import com.crrashh.sleepify.ui.navigation.Screen
 import com.crrashh.sleepify.ui.screens.home.HomeScreen
 import com.crrashh.sleepify.ui.screens.home.HomeViewModel
 import com.crrashh.sleepify.ui.screens.info.InfoScreen
 import com.crrashh.sleepify.ui.screens.info.InfoViewModel
+import com.crrashh.sleepify.ui.screens.points.ChallengeDetailScreen
+import com.crrashh.sleepify.ui.screens.points.ChallengeDetailViewModel
+import com.crrashh.sleepify.ui.screens.points.ChallengesScreen
+import com.crrashh.sleepify.ui.screens.points.ChallengesViewModel
+import com.crrashh.sleepify.ui.screens.points.PointsHistoryScreen
+import com.crrashh.sleepify.ui.screens.points.PointsHistoryViewModel
+import com.crrashh.sleepify.ui.screens.points.PointsScreen
+import com.crrashh.sleepify.ui.screens.points.PointsViewModel
 import com.crrashh.sleepify.ui.screens.ranking.RankingScreen
 import com.crrashh.sleepify.ui.screens.ranking.RankingViewModel
 import com.crrashh.sleepify.ui.screens.sign.SignInScreen
@@ -107,7 +117,8 @@ class MainActivity : ComponentActivity() {
                 val tabOrder = mapOf(
                     Screen.Home.route to 0,
                     Screen.Ranking.route to 1,
-                    Screen.Info.route to 2
+                    Screen.Points.route to 2,
+                    Screen.Info.route to 3
                 )
 
                 AppShell(navController = navController) {
@@ -139,7 +150,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             val vm: HomeViewModel = viewModel(
-                                factory = HomeViewModel.factory(container.userRepository, container.sleepRepository)
+                                factory = HomeViewModel.factory(container.sleepRepository)
                             )
                             HomeScreen(viewModel = vm)
                         }
@@ -162,7 +173,7 @@ class MainActivity : ComponentActivity() {
                             RankingScreen(viewModel = vm)
                         }
                         composable(
-                            Screen.Info.route,
+                            Screen.Points.route,
                             enterTransition = {
                                 val from = tabOrder[initialState.destination.route] ?: 2
                                 val to = 2
@@ -174,6 +185,29 @@ class MainActivity : ComponentActivity() {
                                 if (from < to) slideOutHorizontally { -it } else slideOutHorizontally { it }
                             }
                         ) {
+                            val vm: PointsViewModel = viewModel(
+                                factory = PointsViewModel.factory(container.userRepository, container.pointsRepository)
+                            )
+                            PointsScreen(
+                                onNavigateToHistory = { navController.navigate("points/history") },
+                                onNavigateToChallenges = { navController.navigate("challenges") },
+                                onNavigateToDetail = { id -> navController.navigate("challenges/$id") },
+                                viewModel = vm
+                            )
+                        }
+                        composable(
+                            Screen.Info.route,
+                            enterTransition = {
+                                val from = tabOrder[initialState.destination.route] ?: 3
+                                val to = 3
+                                if (from < to) slideInHorizontally { it } else slideInHorizontally { -it }
+                            },
+                            exitTransition = {
+                                val from = 3
+                                val to = tabOrder[targetState.destination.route] ?: 3
+                                if (from < to) slideOutHorizontally { -it } else slideOutHorizontally { it }
+                            }
+                        ) {
                             InfoScreen(
                                 onSignOut = {
                                     navController.navigate(Screen.SignIn.route) {
@@ -181,6 +215,38 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 viewModel = infoVm
+                            )
+                        }
+                        composable("points/history") {
+                            val vm: PointsHistoryViewModel = viewModel(
+                                factory = PointsHistoryViewModel.factory(container.pointsRepository)
+                            )
+                            PointsHistoryScreen(
+                                onBack = { navController.popBackStack() },
+                                viewModel = vm
+                            )
+                        }
+                        composable("challenges") {
+                            val vm: ChallengesViewModel = viewModel(
+                                factory = ChallengesViewModel.factory(container.pointsRepository)
+                            )
+                            ChallengesScreen(
+                                onBack = { navController.popBackStack() },
+                                onNavigateToDetail = { id -> navController.navigate("challenges/$id") },
+                                viewModel = vm
+                            )
+                        }
+                        composable(
+                            "challenges/{id}",
+                            arguments = listOf(navArgument("id") { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            val id = backStackEntry.arguments?.getString("id") ?: return@composable
+                            val vm: ChallengeDetailViewModel = viewModel(
+                                factory = ChallengeDetailViewModel.factory(container.pointsRepository, id)
+                            )
+                            ChallengeDetailScreen(
+                                onBack = { navController.popBackStack() },
+                                viewModel = vm
                             )
                         }
                     }

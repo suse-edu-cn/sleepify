@@ -4,9 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Leaderboard
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(
@@ -36,6 +38,13 @@ sealed class Screen(
         unselectedIcon = Icons.Outlined.Leaderboard
     )
 
+    data object Points : Screen(
+        route = "points",
+        title = "积分",
+        selectedIcon = Icons.Filled.Star,
+        unselectedIcon = Icons.Outlined.Star
+    )
+
     data object Info : Screen(
         route = "info",
         title = "我的",
@@ -44,6 +53,6 @@ sealed class Screen(
     )
 
     companion object {
-        val bottomNavItems = listOf(Home, Ranking, Info)
+        val bottomNavItems = listOf(Home, Ranking, Points, Info)
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -51,10 +50,6 @@ fun HomeScreen(
             uiState = uiState,
             onStartSleep = viewModel::startSleep,
             onRefresh = viewModel::refreshSleepStatus
-        )
-        PointsCard(
-            uiState = uiState,
-            onRefresh = viewModel::refreshUser
         )
     }
 }
@@ -124,46 +119,6 @@ private fun SleepStatusCard(
                         Spacer(modifier = Modifier.width(6.dp))
                         Text("开始睡觉")
                     }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PointsCard(
-    uiState: HomeUiState,
-    onRefresh: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
-    ) {
-        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Star, null, tint = MaterialTheme.colorScheme.primary)
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("积分", style = MaterialTheme.typography.titleMedium)
-                }
-                IconButton(onClick = onRefresh) {
-                    Icon(Icons.Default.Refresh, contentDescription = "刷新")
-                }
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            when {
-                uiState.userLoading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                }
-                uiState.userInfo != null -> {
-                    Text("${uiState.userInfo.points}", style = MaterialTheme.typography.headlineLarge.copy(lineHeight = 44.sp), color = MaterialTheme.colorScheme.primary)
-                }
-                else -> {
-                    Text(uiState.userError ?: "无法加载积分", style = MaterialTheme.typography.bodyMedium.copy(lineHeight = 26.sp), color = MaterialTheme.colorScheme.error)
                 }
             }
         }

@@ -23,7 +23,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Class
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Numbers
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -120,7 +120,7 @@ fun InfoScreen(
 
             // About items
             InfoListItem(
-                icon = Icons.Default.Share,
+                icon = Icons.Default.Code,
                 key = "开放源代码",
                 onClick = {
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/suse-edu-cn/sleepify/tree/compose/main")))

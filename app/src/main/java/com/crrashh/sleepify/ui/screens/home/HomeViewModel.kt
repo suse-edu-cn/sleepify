@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.crrashh.sleepify.data.api.models.SleepStatusResponse
-import com.crrashh.sleepify.data.api.models.UserInfoResponse
 import com.crrashh.sleepify.data.repository.SleepRepository
-import com.crrashh.sleepify.data.repository.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,9 +17,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 data class HomeUiState(
-    val userInfo: UserInfoResponse? = null,
-    val userLoading: Boolean = true,
-    val userError: String? = null,
     val sleepStatus: SleepStatusResponse? = null,
     val sleepLoading: Boolean = true,
     val sleepError: String? = null,
@@ -34,7 +29,6 @@ data class HomeUiState(
 )
 
 class HomeViewModel(
-    private val userRepository: UserRepository,
     private val sleepRepository: SleepRepository
 ) : ViewModel() {
 
@@ -45,25 +39,7 @@ class HomeViewModel(
         .withZone(ZoneId.systemDefault())
 
     init {
-        refreshAll()
-    }
-
-    fun refreshAll() {
-        refreshUser()
         refreshSleepStatus()
-    }
-
-    fun refreshUser() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(userLoading = true, userError = null)
-            userRepository.getUserInfo()
-                .onSuccess { info ->
-                    _uiState.value = _uiState.value.copy(userInfo = info, userLoading = false)
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(userLoading = false, userError = e.message)
-                }
-        }
     }
 
     fun refreshSleepStatus() {
@@ -138,11 +114,11 @@ class HomeViewModel(
     }
 
     companion object {
-        fun factory(userRepository: UserRepository, sleepRepository: SleepRepository) =
+        fun factory(sleepRepository: SleepRepository) =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(userRepository, sleepRepository) as T
+                    return HomeViewModel(sleepRepository) as T
                 }
             }
     }
