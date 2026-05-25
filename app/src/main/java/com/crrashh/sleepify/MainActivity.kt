@@ -60,18 +60,10 @@ class MainActivity : ComponentActivity() {
 
                 var showTokenExpiredDialog by remember { mutableStateOf(false) }
 
-                val infoVm: InfoViewModel = viewModel(
-                    factory = InfoViewModel.factory(container.userRepository, container.authRepository, container.packageRepository, container.tokenDataStore)
-                )
-
                 LaunchedEffect(Unit) {
                     container.tokenExpired.collect {
                         showTokenExpiredDialog = true
                     }
-                }
-
-                LaunchedEffect(isLoggedIn) {
-                    if (isLoggedIn) infoVm.autoCheckForUpdate()
                 }
 
                 if (showTokenExpiredDialog) {
@@ -87,28 +79,6 @@ class MainActivity : ComponentActivity() {
                                 }
                             }) {
                                 Text("重新登录")
-                            }
-                        }
-                    )
-                }
-
-                val latestVersion = infoVm.uiState.collectAsState().value.latestVersion
-                if (latestVersion != null) {
-                    AlertDialog(
-                        onDismissRequest = { infoVm.dismissUpdate() },
-                        title = { Text("发现更新") },
-                        text = { Text("新版本 ${latestVersion.version}\n\n${latestVersion.content}") },
-                        confirmButton = {
-                            TextButton(onClick = {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(latestVersion.url)))
-                                infoVm.dismissUpdate()
-                            }) {
-                                Text("更新")
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { infoVm.dismissUpdate() }) {
-                                Text("忽略")
                             }
                         }
                     )
@@ -208,6 +178,36 @@ class MainActivity : ComponentActivity() {
                                 if (from < to) slideOutHorizontally { -it } else slideOutHorizontally { it }
                             }
                         ) {
+                            val infoVm: InfoViewModel = viewModel(
+                                factory = InfoViewModel.factory(container.userRepository, container.authRepository, container.packageRepository, container.tokenDataStore)
+                            )
+
+                            LaunchedEffect(Unit) {
+                                infoVm.autoCheckForUpdate()
+                            }
+
+                            val latestVersion = infoVm.uiState.collectAsState().value.latestVersion
+                            if (latestVersion != null) {
+                                AlertDialog(
+                                    onDismissRequest = { infoVm.dismissUpdate() },
+                                    title = { Text("发现更新") },
+                                    text = { Text("新版本 ${latestVersion.version}\n\n${latestVersion.content}") },
+                                    confirmButton = {
+                                        TextButton(onClick = {
+                                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(latestVersion.url)))
+                                            infoVm.dismissUpdate()
+                                        }) {
+                                            Text("更新")
+                                        }
+                                    },
+                                    dismissButton = {
+                                        TextButton(onClick = { infoVm.dismissUpdate() }) {
+                                            Text("忽略")
+                                        }
+                                    }
+                                )
+                            }
+
                             InfoScreen(
                                 onSignOut = {
                                     navController.navigate(Screen.SignIn.route) {
