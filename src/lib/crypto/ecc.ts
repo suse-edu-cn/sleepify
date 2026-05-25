@@ -21,7 +21,7 @@ export function generateKeyPair() {
     }
 }
 
-async function deriveAesKey(sharedSecret: Uint8Array): Promise<CryptoKey> {
+async function deriveAesKey(sharedSecret: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
     const subtle = getCrypto()
 
     const keyMaterial = await subtle.importKey(
@@ -42,7 +42,7 @@ async function deriveAesKey(sharedSecret: Uint8Array): Promise<CryptoKey> {
 }
 
 export async function encrypt(
-    plaintext: Uint8Array,
+    plaintext: Uint8Array<ArrayBuffer>,
     serverPublicKeyBase64: string
 ): Promise<string> {
     const subtle = getCrypto()
@@ -53,12 +53,12 @@ export async function encrypt(
     const ephemeralPrivateKey = p256.utils.randomSecretKey()
     const ephemeralPublicKey = p256.getPublicKey(ephemeralPrivateKey, false)
 
-    const sharedPoint = p256.getSharedSecret(ephemeralPrivateKey, serverPublicKey)
+    const sharedPoint = new Uint8Array(p256.getSharedSecret(ephemeralPrivateKey, serverPublicKey))
     const aesKey = await deriveAesKey(sharedPoint)
 
-    const iv = globalThis.crypto.getRandomValues(new Uint8Array(AES_IV_SIZE))
+    const iv = new Uint8Array(globalThis.crypto.getRandomValues(new Uint8Array(AES_IV_SIZE)))
     const encrypted = new Uint8Array(
-        await subtle.encrypt({ name: 'AES-GCM', iv, tagLength: 128 }, aesKey, plaintext)
+        await subtle.encrypt({ name: 'AES-GCM', iv, tagLength: 128 }, aesKey, plaintext as Uint8Array<ArrayBuffer>)
     )
 
     const ciphertext = encrypted.slice(0, -AES_TAG_SIZE)
@@ -94,7 +94,7 @@ export async function decrypt(
         c.charCodeAt(0)
     )
 
-    const sharedPoint = p256.getSharedSecret(serverPrivateKey, ephemeralPublicKey)
+    const sharedPoint = new Uint8Array(p256.getSharedSecret(serverPrivateKey, ephemeralPublicKey))
     const aesKey = await deriveAesKey(sharedPoint)
 
     const encrypted = new Uint8Array(ciphertext.length + AES_TAG_SIZE)
