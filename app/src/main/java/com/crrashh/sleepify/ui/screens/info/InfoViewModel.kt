@@ -89,7 +89,7 @@ class InfoViewModel(
         val now = System.currentTimeMillis()
         if (now - lastCheckTime < throttleMs) {
             if (!hasUpdate) {
-                _uiState.value = _uiState.value.copy(updateMessage = "当前已是新版本")
+                _uiState.value = _uiState.value.copy(updateMessage = "当前已是最新版本")
             }
             return
         }
@@ -101,7 +101,7 @@ class InfoViewModel(
                     hasUpdate = latest != null
                     _uiState.value = _uiState.value.copy(
                         latestVersion = latest,
-                        updateMessage = if (latest == null) "当前已是新版本" else null
+                        updateMessage = if (latest == null) "当前已是最新版本" else null
                     )
                 }
         }

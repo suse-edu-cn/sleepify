@@ -22,7 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Class
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Numbers
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
@@ -109,8 +109,8 @@ fun InfoScreen(
                 }
                 uiState.userInfo != null -> {
                     val info = uiState.userInfo!!
-                    InfoListItem(icon = Icons.Default.Numbers, key = "学号", value = info.number)
-                    InfoListItem(icon = Icons.Default.Class, key = "班级", value = info.className)
+                    InfoListItem(icon = Icons.Default.Class, key = "学号", value = info.number)
+                    InfoListItem(icon = Icons.Default.School, key = "班级", value = info.className)
                     InfoListItem(icon = Icons.Default.Star, key = "积分", value = "${info.points}")
                 }
                 else -> {

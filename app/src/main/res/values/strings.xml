@@ -13,7 +13,7 @@
     <string name="sleep_start_button">开始睡觉</string>
     <string name="sleep_in_progress">睡眠中</string>
     <string name="points_label">积分</string>
-    <string name="ranking_tab_sleep">睡眠排行</string>
+    <string name="ranking_tab_sleep">周睡眠排行</string>
     <string name="ranking_tab_points">积分排行</string>
     <string name="share_button">分享</string>
     <string name="version_label">版本</string>

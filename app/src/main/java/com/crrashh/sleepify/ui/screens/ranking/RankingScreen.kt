@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crrashh.sleepify.data.api.models.PointsRankingItem
 import com.crrashh.sleepify.data.api.models.SleepRankingItem
-import com.crrashh.sleepify.ui.theme.RankingSelfBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +64,7 @@ fun RankingScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = uiState.selectedTab) {
-            Tab(selected = uiState.selectedTab == 0, onClick = { viewModel.selectTab(0) }, text = { Text("睡眠排行") })
+            Tab(selected = uiState.selectedTab == 0, onClick = { viewModel.selectTab(0) }, text = { Text("周睡眠排行") })
             Tab(selected = uiState.selectedTab == 1, onClick = { viewModel.selectTab(1) }, text = { Text("积分排行") })
         }
 
@@ -122,7 +121,7 @@ private fun SleepRankingList(
             val isSelf = item.id == currentUserId
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { onItemClick(item) },
-                colors = CardDefaults.cardColors(containerColor = if (isSelf) RankingSelfBackground else MaterialTheme.colorScheme.surfaceContainerLow)
+                colors = CardDefaults.cardColors(containerColor = if (isSelf) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("${index + 1}", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.width(36.dp))
@@ -150,8 +149,8 @@ private fun PointsRankingList(
         itemsIndexed(items) { index, item ->
             val isSelf = item.id == currentUserId
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = if (isSelf) RankingSelfBackground else MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.fillMaxWidth().clickable {},
+                colors = CardDefaults.cardColors(containerColor = if (isSelf) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("${index + 1}", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary, modifier = Modifier.width(36.dp))
