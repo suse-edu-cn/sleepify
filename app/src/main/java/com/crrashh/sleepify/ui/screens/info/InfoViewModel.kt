@@ -70,6 +70,7 @@ class InfoViewModel(
 
     private var lastCheckTime = 0L
     private var hasUpdate = false
+    private var cachedLatestVersion: LatestVersionResponse? = null
     private val throttleMs = 20 * 60 * 1000L
 
     fun autoCheckForUpdate() {
@@ -80,6 +81,7 @@ class InfoViewModel(
             packageRepository.getLatestVersion()
                 .onSuccess { latest ->
                     hasUpdate = latest != null
+                    cachedLatestVersion = latest
                     _uiState.value = _uiState.value.copy(latestVersion = latest)
                 }
         }
@@ -88,7 +90,9 @@ class InfoViewModel(
     fun checkForUpdate() {
         val now = System.currentTimeMillis()
         if (now - lastCheckTime < throttleMs) {
-            if (!hasUpdate) {
+            if (hasUpdate) {
+                _uiState.value = _uiState.value.copy(latestVersion = cachedLatestVersion)
+            } else {
                 _uiState.value = _uiState.value.copy(updateMessage = "当前已是最新版本")
             }
             return
@@ -99,6 +103,7 @@ class InfoViewModel(
             packageRepository.getLatestVersion()
                 .onSuccess { latest ->
                     hasUpdate = latest != null
+                    cachedLatestVersion = latest
                     _uiState.value = _uiState.value.copy(
                         latestVersion = latest,
                         updateMessage = if (latest == null) "当前已是最新版本" else null
