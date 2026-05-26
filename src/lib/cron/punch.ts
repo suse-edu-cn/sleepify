@@ -67,7 +67,7 @@ export async function autoPunch() {
         const statusRes = await upstream.get('/sleep/today_status/', { headers })
         const status = statusRes.data?.status
 
-        if (status !== 'NO_RECORD') {
+        if (status !== 'NO_RECORD' && status !== 'COMPLETED') {
             console.log('[cron] 今日已有打卡记录，跳过')
             return
         }
