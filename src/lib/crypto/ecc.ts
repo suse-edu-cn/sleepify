@@ -54,7 +54,8 @@ export async function encrypt(
     const ephemeralPublicKey = p256.getPublicKey(ephemeralPrivateKey, false)
 
     const sharedPoint = new Uint8Array(p256.getSharedSecret(ephemeralPrivateKey, serverPublicKey))
-    const aesKey = await deriveAesKey(sharedPoint)
+    const sharedX = sharedPoint.slice(1, 1 + 32)
+    const aesKey = await deriveAesKey(sharedX)
 
     const iv = new Uint8Array(globalThis.crypto.getRandomValues(new Uint8Array(AES_IV_SIZE)))
     const encrypted = new Uint8Array(
@@ -95,7 +96,8 @@ export async function decrypt(
     )
 
     const sharedPoint = new Uint8Array(p256.getSharedSecret(serverPrivateKey, ephemeralPublicKey))
-    const aesKey = await deriveAesKey(sharedPoint)
+    const sharedX = sharedPoint.slice(1, 1 + 32)
+    const aesKey = await deriveAesKey(sharedX)
 
     const encrypted = new Uint8Array(ciphertext.length + AES_TAG_SIZE)
     encrypted.set(ciphertext, 0)
