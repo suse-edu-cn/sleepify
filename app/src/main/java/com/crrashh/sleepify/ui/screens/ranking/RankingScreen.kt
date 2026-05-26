@@ -1,6 +1,5 @@
 package com.crrashh.sleepify.ui.screens.ranking
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -120,7 +119,8 @@ private fun SleepRankingList(
         itemsIndexed(items) { index, item ->
             val isSelf = item.id == currentUserId
             Card(
-                modifier = Modifier.fillMaxWidth().clickable { onItemClick(item) },
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onItemClick(item) },
                 colors = CardDefaults.cardColors(containerColor = if (isSelf) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -149,7 +149,8 @@ private fun PointsRankingList(
         itemsIndexed(items) { index, item ->
             val isSelf = item.id == currentUserId
             Card(
-                modifier = Modifier.fillMaxWidth().clickable {},
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {},
                 colors = CardDefaults.cardColors(containerColor = if (isSelf) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerLow)
             ) {
                 Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
