@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v2'
+const CACHE_VERSION = 'v3'
 const STATIC_CACHE = `sleepify-static-${CACHE_VERSION}`
 const RUNTIME_CACHE = `sleepify-runtime-${CACHE_VERSION}`
 const RUNTIME_MAX_ENTRIES = 80
@@ -18,7 +18,6 @@ const STATIC_EXTENSIONS = [
 ]
 
 const PRECACHE_URLS = [
-    '/',
     '/site.webmanifest',
     '/favicon.ico',
     '/favicon-16x16.png',
