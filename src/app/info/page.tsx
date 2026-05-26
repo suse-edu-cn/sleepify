@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../styles/info.css'
 import { useRouter } from 'next/navigation'
 import { confirm } from 'mdui/functions/confirm.js'
@@ -35,6 +35,11 @@ export default function InfoPage() {
     const router = useRouter()
     const { user, userLoading, clearUser } = useUserState()
     const [signingOut, setSigningOut] = useState(false)
+    const [isAndroid, setIsAndroid] = useState(false)
+
+    useEffect(() => {
+        setIsAndroid(/android/i.test(navigator.userAgent))
+    }, [])
 
     const onSignOut = async () => {
         if (signingOut) {
@@ -141,6 +146,20 @@ export default function InfoPage() {
                                 <span>分享</span>
                             </div>
                         </mdui-list-item>
+                        {isAndroid && (
+                            <mdui-list-item
+                                className="sleepify-info-item"
+                                icon="android"
+                                end-icon="arrow_right"
+                                onClick={() => {
+                                    window.location.href = '/v1/pkg/url'
+                                }}
+                            >
+                                <div className="sleepify-info-row">
+                                    <span>获取 App</span>
+                                </div>
+                            </mdui-list-item>
+                        )}
                         <mdui-list-item className="sleepify-info-item" icon="info">
                             <div className="sleepify-info-row">
                                 <span>版本</span>
