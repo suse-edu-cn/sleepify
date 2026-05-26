@@ -13,8 +13,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -51,6 +52,7 @@ fun HomeScreen(
             onStartSleep = viewModel::startSleep,
             onRefresh = viewModel::refreshSleepStatus
         )
+        SleepStatsCard(uiState = uiState)
     }
 }
 
@@ -109,18 +111,61 @@ private fun SleepStatusCard(
                 }
                 else -> {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Warning, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("暂无活跃的睡眠记录", style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 30.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("当前无进行中的睡眠活动", style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 30.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     Button(onClick = onStartSleep, modifier = Modifier.fillMaxWidth()) {
-                        Icon(Icons.Default.Bedtime, null)
-                        Spacer(modifier = Modifier.width(6.dp))
                         Text("开始睡觉")
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SleepStatsCard(uiState: HomeUiState) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.BarChart, null, tint = MaterialTheme.colorScheme.primary)
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("睡眠统计", style = MaterialTheme.typography.titleMedium)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            when {
+                uiState.statsLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
+                uiState.weeklySleepDays != null -> {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        StatItem(label = "本周睡眠天数", value = "${uiState.weeklySleepDays}")
+                        StatItem(label = "本月睡眠天数", value = "${uiState.monthlySleepDays}")
+                        StatItem(label = "最大连续天数", value = "${uiState.maxContinuousDays}")
+                    }
+                }
+                else -> {
+                    Text("暂无统计数据", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
+            }
+            Spacer(modifier = Modifier.height(6.dp))
+        }
+    }
+}
+
+@Composable
+private fun StatItem(label: String, value: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

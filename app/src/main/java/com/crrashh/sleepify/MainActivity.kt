@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             val vm: HomeViewModel = viewModel(
-                                factory = HomeViewModel.factory(container.sleepRepository)
+                                factory = HomeViewModel.factory(container.sleepRepository, container.rankingRepository, container.tokenDataStore)
                             )
                             HomeScreen(viewModel = vm)
                         }

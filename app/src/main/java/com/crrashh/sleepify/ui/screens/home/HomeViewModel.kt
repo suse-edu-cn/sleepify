@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.crrashh.sleepify.data.api.models.SleepStatusResponse
+import com.crrashh.sleepify.data.local.TokenDataStore
+import com.crrashh.sleepify.data.repository.RankingRepository
 import com.crrashh.sleepify.data.repository.SleepRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,11 +27,17 @@ data class HomeUiState(
     val remainingText: String = "",
     val progressPercent: Float = 0f,
     val startTimeFormatted: String = "",
-    val endTimeFormatted: String = ""
+    val endTimeFormatted: String = "",
+    val weeklySleepDays: Int? = null,
+    val monthlySleepDays: Int? = null,
+    val maxContinuousDays: Int? = null,
+    val statsLoading: Boolean = true
 )
 
 class HomeViewModel(
-    private val sleepRepository: SleepRepository
+    private val sleepRepository: SleepRepository,
+    private val rankingRepository: RankingRepository,
+    private val tokenDataStore: TokenDataStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -40,6 +48,7 @@ class HomeViewModel(
 
     init {
         refreshSleepStatus()
+        loadSleepStats()
     }
 
     fun refreshSleepStatus() {
@@ -113,12 +122,39 @@ class HomeViewModel(
         return if (hours > 0) "${hours} 小时 ${minutes} 分钟" else "${minutes} 分钟"
     }
 
+    private fun loadSleepStats() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(statsLoading = true)
+            val userId = tokenDataStore.getUserIdBlocking()
+            if (userId.isNullOrBlank()) {
+                _uiState.value = _uiState.value.copy(statsLoading = false)
+                return@launch
+            }
+            rankingRepository.getSleepRanking()
+                .onSuccess { list ->
+                    val self = list.find { it.id == userId }
+                    _uiState.value = _uiState.value.copy(
+                        weeklySleepDays = self?.weeklySleepDays,
+                        monthlySleepDays = self?.monthlySleepDays,
+                        maxContinuousDays = self?.maxContinuousDays,
+                        statsLoading = false
+                    )
+                }
+                .onFailure {
+                    _uiState.value = _uiState.value.copy(statsLoading = false)
+                }
+        }
+    }
+
     companion object {
-        fun factory(sleepRepository: SleepRepository) =
-            object : ViewModelProvider.Factory {
+        fun factory(
+            sleepRepository: SleepRepository,
+            rankingRepository: RankingRepository,
+            tokenDataStore: TokenDataStore
+        ) = object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(sleepRepository) as T
+                    return HomeViewModel(sleepRepository, rankingRepository, tokenDataStore) as T
                 }
             }
     }
