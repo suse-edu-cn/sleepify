@@ -7,8 +7,10 @@ import com.crrashh.sleepify.data.api.models.CurrentChallenge
 import com.crrashh.sleepify.data.api.models.LatestVersionResponse
 import com.crrashh.sleepify.data.api.models.PointsHistoryItem
 import com.crrashh.sleepify.data.api.models.PointsRankingItem
+import com.crrashh.sleepify.data.api.models.PublicKeyResponse
 import com.crrashh.sleepify.data.api.models.SignInRequest
 import com.crrashh.sleepify.data.api.models.SignInResponse
+import com.crrashh.sleepify.data.api.models.SleepConfig
 import com.crrashh.sleepify.data.api.models.SleepRankingItem
 import com.crrashh.sleepify.data.api.models.SleepStartResponse
 import com.crrashh.sleepify.data.api.models.SleepStatusResponse
@@ -19,6 +21,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
+
+    @GET("sign/key")
+    suspend fun getPublicKey(): ApiResponse<PublicKeyResponse>
 
     @POST("sign/in")
     suspend fun signIn(@Body request: SignInRequest): ApiResponse<SignInResponse>
@@ -34,6 +39,12 @@ interface ApiService {
 
     @GET("sleep/status")
     suspend fun getSleepStatus(): ApiResponse<SleepStatusResponse>
+
+    @GET("sleep/config")
+    suspend fun getSleepConfig(): ApiResponse<SleepConfig>
+
+    @POST("sleep/config")
+    suspend fun updateSleepConfig(@Body config: SleepConfig): ApiResponse<SleepConfig>
 
     @GET("sleep/ranking")
     suspend fun getSleepRanking(): ApiResponse<List<SleepRankingItem>>
