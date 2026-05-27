@@ -68,6 +68,17 @@ class InfoViewModel(
         }
     }
 
+    fun localSignOut() {
+        viewModelScope.launch {
+            authRepository.clearLocal()
+            _uiState.value = _uiState.value.copy(signOutSuccess = true)
+        }
+    }
+
+    fun resetSignOutState() {
+        _uiState.value = _uiState.value.copy(signOutSuccess = false)
+    }
+
     private var lastCheckTime = 0L
     private var hasUpdate = false
     private var cachedLatestVersion: LatestVersionResponse? = null

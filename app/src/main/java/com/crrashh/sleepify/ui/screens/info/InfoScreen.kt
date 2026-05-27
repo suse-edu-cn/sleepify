@@ -34,11 +34,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import android.widget.Toast
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.crrashh.sleepify.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,13 +62,17 @@ fun InfoScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    var showLogoutDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.refresh()
     }
 
     LaunchedEffect(uiState.signOutSuccess) {
-        if (uiState.signOutSuccess) onSignOut()
+        if (uiState.signOutSuccess) {
+            viewModel.resetSignOutState()
+            onSignOut()
+        }
     }
 
     LaunchedEffect(uiState.updateMessage) {
@@ -135,7 +143,7 @@ fun InfoScreen(
 
             // Sign out
             Button(
-                onClick = viewModel::signOut,
+                onClick = { showLogoutDialog = true },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isSigningOut,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
@@ -150,6 +158,29 @@ fun InfoScreen(
             }
         }
 
+        if (showLogoutDialog) {
+            AlertDialog(
+                onDismissRequest = { showLogoutDialog = false },
+                title = { Text("退出登录") },
+                text = { Text("是否下线其它已登录的设备？\n注：这可能会导致自动打卡功能失效。") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showLogoutDialog = false
+                        viewModel.signOut()
+                    }) {
+                        Text("确认下线")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showLogoutDialog = false
+                        viewModel.localSignOut()
+                    }) {
+                        Text("取消")
+                    }
+                }
+            )
+        }
     }
 }
 
