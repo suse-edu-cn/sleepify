@@ -3,6 +3,7 @@ package com.crrashh.sleepify.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.crrashh.sleepify.data.api.models.SleepConfig
 import com.crrashh.sleepify.data.api.models.SleepStatusResponse
 import com.crrashh.sleepify.data.local.TokenDataStore
 import com.crrashh.sleepify.data.repository.RankingRepository
@@ -31,7 +32,14 @@ data class HomeUiState(
     val weeklySleepDays: Int? = null,
     val monthlySleepDays: Int? = null,
     val maxContinuousDays: Int? = null,
-    val statsLoading: Boolean = true
+    val statsLoading: Boolean = true,
+    val autoSleepEnabled: Boolean = false,
+    val autoSleepTime: String = "22:00",
+    val autoSleepFrequency: String = "daily",
+    val autoSleepDays: List<Int> = emptyList(),
+    val autoSleepLoading: Boolean = false,
+    val autoSleepSaving: Boolean = false,
+    val showConfigSuccessDialog: Boolean = false
 )
 
 class HomeViewModel(
@@ -49,6 +57,7 @@ class HomeViewModel(
     init {
         refreshSleepStatus()
         loadSleepStats()
+        loadAutoSleepConfig()
     }
 
     fun refreshSleepStatus() {
@@ -144,6 +153,76 @@ class HomeViewModel(
                     _uiState.value = _uiState.value.copy(statsLoading = false)
                 }
         }
+    }
+
+    private fun loadAutoSleepConfig() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(autoSleepLoading = true)
+            sleepRepository.getSleepConfig()
+                .onSuccess { config ->
+                    _uiState.value = _uiState.value.copy(
+                        autoSleepEnabled = config.enabled,
+                        autoSleepTime = config.time,
+                        autoSleepFrequency = config.frequency,
+                        autoSleepDays = config.days,
+                        autoSleepLoading = false
+                    )
+                }
+                .onFailure {
+                    _uiState.value = _uiState.value.copy(autoSleepLoading = false)
+                }
+        }
+    }
+
+    fun toggleAutoSleep(enabled: Boolean) {
+        _uiState.value = _uiState.value.copy(autoSleepEnabled = enabled)
+    }
+
+    fun onTimeSelected(hour: Int, minute: Int) {
+        _uiState.value = _uiState.value.copy(
+            autoSleepTime = "%02d:%02d".format(hour, minute)
+        )
+    }
+
+    fun onFrequencyChanged(frequency: String) {
+        _uiState.value = _uiState.value.copy(
+            autoSleepFrequency = frequency,
+            autoSleepDays = if (frequency != "custom") emptyList() else _uiState.value.autoSleepDays
+        )
+    }
+
+    fun toggleDay(day: Int) {
+        val current = _uiState.value.autoSleepDays
+        _uiState.value = _uiState.value.copy(
+            autoSleepDays = if (day in current) current - day else current + day
+        )
+    }
+
+    fun saveAutoSleepConfig() {
+        val state = _uiState.value
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(autoSleepSaving = true)
+            val config = SleepConfig(
+                enabled = state.autoSleepEnabled,
+                time = state.autoSleepTime,
+                frequency = state.autoSleepFrequency,
+                days = state.autoSleepDays
+            )
+            sleepRepository.updateSleepConfig(config)
+                .onSuccess {
+                    _uiState.value = _uiState.value.copy(
+                        autoSleepSaving = false,
+                        showConfigSuccessDialog = true
+                    )
+                }
+                .onFailure {
+                    _uiState.value = _uiState.value.copy(autoSleepSaving = false)
+                }
+        }
+    }
+
+    fun dismissConfigSuccessDialog() {
+        _uiState.value = _uiState.value.copy(showConfigSuccessDialog = false)
     }
 
     companion object {
