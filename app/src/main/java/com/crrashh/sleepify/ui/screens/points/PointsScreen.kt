@@ -164,7 +164,7 @@ private fun ChallengeCard(challenge: CurrentChallenge, onClick: () -> Unit) {
             ) {
                 Text(challenge.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
-                    "+${challenge.points} 积分",
+                    "+${challenge.points}",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
