@@ -16,6 +16,7 @@ android {
         targetSdk = 36
         versionCode = 29
         versionName = "1.0.0"
+
     }
 
     buildTypes {
@@ -42,6 +43,21 @@ android {
     dependenciesInfo {
         includeInApk = true
         includeInBundle = true
+    }
+
+    packaging {
+        jniLibs {
+            excludes += listOf(
+                "lib/arm64-v8a/libandroidx.graphics.path.so",
+                "lib/armeabi-v7a/libandroidx.graphics.path.so",
+                "lib/x86/libandroidx.graphics.path.so",
+                "lib/x86_64/libandroidx.graphics.path.so",
+                "lib/arm64-v8a/libdatastore_shared_counter.so",
+                "lib/armeabi-v7a/libdatastore_shared_counter.so",
+                "lib/x86/libdatastore_shared_counter.so",
+                "lib/x86_64/libdatastore_shared_counter.so"
+            )
+        }
     }
 }
 
