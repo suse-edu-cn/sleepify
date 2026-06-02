@@ -41,10 +41,11 @@ fun PointsHistoryScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         topBar = {
             TopAppBar(
                 title = { Text("积分历史") },
-                windowInsets = WindowInsets(0, 0, 0, 0),
+                windowInsets = WindowInsets(0),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
@@ -100,6 +101,7 @@ fun PointsHistoryScreen(
 private fun HistoryCard(item: PointsHistoryItem) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        onClick = {},
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

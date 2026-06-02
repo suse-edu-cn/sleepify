@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -88,7 +89,7 @@ fun InfoScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(9.dp)
         ) {
             // Header
             Card(
@@ -120,6 +121,7 @@ fun InfoScreen(
                     InfoListItem(icon = Icons.Default.Class, key = "学号", value = info.number)
                     InfoListItem(icon = Icons.Default.School, key = "班级", value = info.className)
                     InfoListItem(icon = Icons.Default.Star, key = "积分", value = "${info.points}")
+                    InfoListItem(icon = Icons.AutoMirrored.Filled.Message, key = "QQ", value = info.qq)
                 }
                 else -> {
                     Text(uiState.error ?: "加载失败", color = MaterialTheme.colorScheme.error)
@@ -156,6 +158,16 @@ fun InfoScreen(
                     Text("退出登录")
                 }
             }
+
+            Text(
+                text = "© 2026 crrashh1542",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
         }
 
         if (showLogoutDialog) {

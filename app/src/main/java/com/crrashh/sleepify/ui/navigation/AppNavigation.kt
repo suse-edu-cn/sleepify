@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Leaderboard
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(
@@ -42,7 +42,7 @@ sealed class Screen(
         route = "points",
         title = "积分",
         selectedIcon = Icons.Filled.Star,
-        unselectedIcon = Icons.Outlined.Star
+        unselectedIcon = Icons.Outlined.StarBorder
     )
 
     data object Info : Screen(
