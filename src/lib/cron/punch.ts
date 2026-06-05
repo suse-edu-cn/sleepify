@@ -1,4 +1,4 @@
-import { getConfig } from '@/lib/db'
+import { getAllAutoSleepUsers } from '@/lib/db'
 import { upstream, getAuthHeader, isInvalidTokenError } from '@/lib/server/upstream'
 
 type AutoSleepConfig = {
@@ -29,35 +29,13 @@ function isConfigTime(config: AutoSleepConfig): boolean {
     return now.getHours() === hh && now.getMinutes() === mm
 }
 
-export async function autoPunch() {
-    const rawConfig = getConfig('auto_sleep')
-    if (!rawConfig) {
-        return
-    }
-
-    let config: AutoSleepConfig
-    try {
-        config = JSON.parse(rawConfig)
-    } catch {
-        return
-    }
-
-    if (!config.enabled) {
-        return
-    }
-
+async function autoPunchForUser(userId: string, token: string, config: AutoSleepConfig) {
     if (!isConfigTime(config)) {
         return
     }
 
     if (!shouldPunchToday(config)) {
-        console.log(`[cron] ${config.time} 今日不在打卡计划内，跳过`)
-        return
-    }
-
-    const token = getConfig('token')
-    if (!token) {
-        console.log('[cron] 未找到 token，跳过打卡')
+        console.log(`[cron] [${userId}] ${config.time} 今日不在打卡计划内，跳过`)
         return
     }
 
@@ -68,26 +46,45 @@ export async function autoPunch() {
         const status = statusRes.data?.status
 
         if (status !== 'NO_RECORD' && status !== 'COMPLETED') {
-            console.log('[cron] 今日已有打卡记录，跳过')
+            console.log(`[cron] [${userId}] 今日已有打卡记录，跳过`)
             return
         }
     } catch (error) {
         if (isInvalidTokenError(error)) {
-            console.log('[cron] token 已失效，跳过打卡')
+            console.log(`[cron] [${userId}] token 已失效，跳过打卡`)
             return
         }
-        console.error('[cron] 检查打卡状态失败:', error)
+        console.error(`[cron] [${userId}] 检查打卡状态失败:`, error)
         return
     }
 
     try {
         await upstream.post('/sleep/start/', {}, { headers })
-        console.log('[cron] 自动打卡成功')
+        console.log(`[cron] [${userId}] 自动打卡成功`)
     } catch (error) {
         if (isInvalidTokenError(error)) {
-            console.log('[cron] token 已失效，打卡失败')
+            console.log(`[cron] [${userId}] token 已失效，打卡失败`)
             return
         }
-        console.error('[cron] 自动打卡失败:', error)
+        console.error(`[cron] [${userId}] 自动打卡失败:`, error)
+    }
+}
+
+export async function autoPunch() {
+    const users = getAllAutoSleepUsers()
+
+    for (const user of users) {
+        let config: AutoSleepConfig
+        try {
+            config = JSON.parse(user.auto_sleep)
+        } catch {
+            continue
+        }
+
+        if (!config.enabled) {
+            continue
+        }
+
+        await autoPunchForUser(user.user_id, user.token, config)
     }
 }

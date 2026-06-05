@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { fail, success } from '@/lib/server/api'
-import { getConfig, setConfig } from '@/lib/db'
+import { getConfig, setConfig, getUserAutoSleep, setUserAutoSleep } from '@/lib/db'
 
 const DEFAULT_CONFIG = {
     enabled: false,
@@ -16,17 +16,42 @@ const configSchema = z.object({
     days: z.array(z.number().int().min(0).max(6)),
 })
 
-export async function GET() {
-    const raw = getConfig('auto_sleep')
-    if (!raw) {
-        return success(DEFAULT_CONFIG)
+function readCookie(rawCookie: string | null, key: string) {
+    if (!rawCookie) return null
+    return (
+        rawCookie
+            .split(';')
+            .map((item) => item.trim())
+            .find((item) => item.startsWith(`${key}=`))
+            ?.replace(`${key}=`, '') ?? null
+    )
+}
+
+function getConfigForUser(userId: string | null) {
+    if (userId) {
+        const raw = getUserAutoSleep(userId)
+        if (raw) {
+            try {
+                return JSON.parse(raw)
+            } catch {
+                return DEFAULT_CONFIG
+            }
+        }
+        return DEFAULT_CONFIG
     }
 
+    const raw = getConfig('auto_sleep')
+    if (!raw) return DEFAULT_CONFIG
     try {
-        return success(JSON.parse(raw))
+        return JSON.parse(raw)
     } catch {
-        return success(DEFAULT_CONFIG)
+        return DEFAULT_CONFIG
     }
+}
+
+export async function GET(request: Request) {
+    const userId = readCookie(request.headers.get('cookie'), 'id')
+    return success(getConfigForUser(userId))
 }
 
 export async function POST(request: Request) {
@@ -38,7 +63,15 @@ export async function POST(request: Request) {
             return fail(1005, '请求的内容不符合要求')
         }
 
-        setConfig('auto_sleep', JSON.stringify(parsed.data))
+        const userId = readCookie(request.headers.get('cookie'), 'id')
+        const serialized = JSON.stringify(parsed.data)
+
+        if (userId) {
+            setUserAutoSleep(userId, serialized)
+        } else {
+            setConfig('auto_sleep', serialized)
+        }
+
         return success(parsed.data)
     } catch {
         return fail(1000, '请求内容错误')

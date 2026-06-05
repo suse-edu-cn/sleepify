@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer'
 import axios from 'axios'
 import { z } from 'zod'
-import { getConfig, setConfig } from '@/lib/db'
+import { getConfig, upsertUser } from '@/lib/db'
 import { decrypt } from '@/lib/crypto/ecc'
 import { fail, internalError, success } from '@/lib/server/api'
 import { upstream } from '@/lib/server/upstream'
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
                 return internalError()
             }
 
-            setConfig('token', token)
+            upsertUser(id, token)
 
             const response = success({ token, id })
 

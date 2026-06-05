@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { NextResponse } from 'next/server'
-import { removeConfig } from '@/lib/db'
+import { deactivateUser } from '@/lib/db'
 import { fail, internalError, success } from '@/lib/server/api'
 import { getAuthHeader, isInvalidTokenError, upstream } from '@/lib/server/upstream'
 
@@ -21,6 +21,7 @@ function readCookie(rawCookie: string | null, key: string) {
 export async function POST(request: Request) {
     const rawCookie = request.headers.get('cookie')
     const token = readCookie(rawCookie, 'token')
+    const userId = readCookie(rawCookie, 'id')
 
     if (!token) {
         return fail(1001, '未检测到登录状态')
@@ -57,11 +58,11 @@ export async function POST(request: Request) {
             }
         )
 
-        removeConfig('token')
+        if (userId) deactivateUser(userId)
         return clearCookies(success({}))
     } catch (error) {
         if (isInvalidTokenError(error)) {
-            removeConfig('token')
+            if (userId) deactivateUser(userId)
             return clearCookies(fail(1002, '登录状态无效'))
         }
 
