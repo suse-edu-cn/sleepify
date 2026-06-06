@@ -34,18 +34,23 @@ class InfoViewModel(
 
     private val _uiState = MutableStateFlow(InfoUiState())
     val uiState: StateFlow<InfoUiState> = _uiState.asStateFlow()
+    private var cachedUserId: String? = null
 
     init {
         refresh()
     }
 
     fun refresh() {
-        if (_uiState.value.userInfo != null) return
+        val currentUserId = runCatching {
+            kotlinx.coroutines.runBlocking { tokenDataStore.getUserIdBlocking() }
+        }.getOrNull()
+        if (_uiState.value.userInfo != null && cachedUserId == currentUserId) return
         viewModelScope.launch {
             if (tokenDataStore.getTokenBlocking().isNullOrBlank()) return@launch
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             userRepository.getUserInfo()
                 .onSuccess { info ->
+                    cachedUserId = currentUserId
                     _uiState.value = _uiState.value.copy(userInfo = info, isLoading = false)
                 }
                 .onFailure { e ->
