@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.ui.unit.dp
 import com.crrashh.sleepify.data.api.models.PointsHistoryItem
+import com.crrashh.sleepify.util.formatPoints
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,7 +113,7 @@ private fun HistoryCard(item: PointsHistoryItem) {
             ) {
                 Text(item.reason, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                 Text(
-                    if (item.change > 0) "+${item.change}" else "${item.change}",
+                    if (item.change > 0) "+${item.change.formatPoints()}" else item.change.formatPoints(),
                     style = MaterialTheme.typography.titleMedium,
                     color = if (item.change > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                 )

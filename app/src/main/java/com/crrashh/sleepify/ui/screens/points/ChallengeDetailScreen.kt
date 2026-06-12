@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.crrashh.sleepify.util.formatPoints
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -184,7 +185,7 @@ fun ChallengeDetailScreen(
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                     ) {
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            DetailRow("积分", "+${detail.points}")
+                            DetailRow("积分", "+${detail.points.formatPoints()}")
                             HorizontalDivider()
                             DetailRow(
                                 "持续时间",

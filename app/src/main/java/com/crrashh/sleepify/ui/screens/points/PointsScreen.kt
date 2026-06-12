@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.crrashh.sleepify.data.api.models.CurrentChallenge
+import com.crrashh.sleepify.util.formatPoints
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -84,7 +85,7 @@ private fun PointsCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            "${uiState.points}",
+                            uiState.points!!.formatPoints(),
                             style = MaterialTheme.typography.headlineLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
@@ -164,7 +165,7 @@ private fun ChallengeCard(challenge: CurrentChallenge, onClick: () -> Unit) {
             ) {
                 Text(challenge.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
-                    "+${challenge.points}",
+                    "+${challenge.points.formatPoints()}",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )

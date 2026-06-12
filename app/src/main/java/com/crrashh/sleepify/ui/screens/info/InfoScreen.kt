@@ -45,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.crrashh.sleepify.BuildConfig
+import com.crrashh.sleepify.util.formatPoints
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,7 +90,7 @@ fun InfoScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(9.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             // Header
             Card(
@@ -120,8 +121,7 @@ fun InfoScreen(
                     val info = uiState.userInfo!!
                     InfoListItem(icon = Icons.Default.Class, key = "学号", value = info.number)
                     InfoListItem(icon = Icons.Default.School, key = "班级", value = info.className)
-                    InfoListItem(icon = Icons.Default.Star, key = "积分", value = "${info.points}")
-                    InfoListItem(icon = Icons.AutoMirrored.Filled.Message, key = "QQ", value = info.qq)
+                    InfoListItem(icon = Icons.Default.Star, key = "积分", value = info.points.formatPoints())
                 }
                 else -> {
                     Text(uiState.error ?: "加载失败", color = MaterialTheme.colorScheme.error)

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crrashh.sleepify.data.api.models.PointsRankingItem
 import com.crrashh.sleepify.data.api.models.SleepRankingItem
+import com.crrashh.sleepify.util.formatPoints
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,7 +160,7 @@ private fun PointsRankingList(
                         Text(item.name, style = MaterialTheme.typography.titleMedium)
                         Text(item.className, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    Text("${item.points}", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(item.points.formatPoints(), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                 }
             }
         }

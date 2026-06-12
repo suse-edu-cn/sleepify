@@ -7,5 +7,5 @@ data class UserInfoResponse(
     val number: String,
     @SerializedName("class") val className: String,
     val qq: String,
-    val points: Int
+    val points: Double
 )

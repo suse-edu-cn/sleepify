@@ -6,5 +6,5 @@ data class PointsRankingItem(
     val id: String,
     val name: String,
     @SerializedName("class_name") val className: String,
-    val points: Int
+    val points: Double
 )

@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.crrashh.sleepify.data.api.models.Challenge
+import com.crrashh.sleepify.util.formatPoints
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -145,7 +146,7 @@ private fun ChallengeListCard(
                 if (!challenge.isOnetime && challenge.duration > 0) {
                     TagChip(label = "${challenge.duration}天", containerColor = MaterialTheme.colorScheme.secondaryContainer)
                 }
-                TagChip(label = "+${challenge.points} 积分", containerColor = MaterialTheme.colorScheme.primaryContainer)
+                TagChip(label = "+${challenge.points.formatPoints()} 积分", containerColor = MaterialTheme.colorScheme.primaryContainer)
             }
             if (challenge.endTime != null) {
                 Spacer(modifier = Modifier.height(4.dp))

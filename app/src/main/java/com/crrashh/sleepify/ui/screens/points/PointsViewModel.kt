@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class PointsUiState(
-    val points: Int? = null,
+    val points: Double? = null,
     val isLoading: Boolean = true,
     val error: String? = null,
     val challenges: List<CurrentChallenge> = emptyList(),

@@ -7,7 +7,7 @@ data class ChallengeDetail(
     val name: String,
     val description: String?,
     @SerializedName("is_onetime") val isOnetime: Boolean,
-    val points: Int,
+    val points: Double,
     val duration: Int,
     @SerializedName("is_repeatable") val isRepeatable: Boolean,
     @SerializedName("is_include_weekends") val isIncludeWeekends: Boolean,

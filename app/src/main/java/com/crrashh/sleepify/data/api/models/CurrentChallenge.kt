@@ -6,7 +6,7 @@ data class CurrentChallenge(
     val id: String,
     val name: String,
     @SerializedName("is_onetime") val isOnetime: Boolean,
-    val points: Int,
+    val points: Double,
     val duration: Int,
     @SerializedName("start_date") val startDate: String?,
     @SerializedName("end_date") val endDate: String?,

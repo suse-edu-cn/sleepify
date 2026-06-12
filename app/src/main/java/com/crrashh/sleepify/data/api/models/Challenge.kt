@@ -7,7 +7,7 @@ data class Challenge(
     val name: String,
     val description: String?,
     @SerializedName("is_onetime") val isOnetime: Boolean,
-    val points: Int,
+    val points: Double,
     val duration: Int,
     @SerializedName("end_time") val endTime: String?,
     val status: String
