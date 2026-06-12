@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crrashh.sleepify.data.api.models.PointsRankingItem
 import com.crrashh.sleepify.data.api.models.SleepRankingItem
+import com.crrashh.sleepify.util.formatIsoDate
 import com.crrashh.sleepify.util.formatPoints
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -178,7 +179,7 @@ private fun SleepDetailDialog(item: SleepRankingItem, onDismiss: () -> Unit) {
                 HorizontalDivider()
                 DetailRow("最长连续打卡", "${item.maxContinuousDays}天")
                 HorizontalDivider()
-                DetailRow("最近一次打卡", item.lastSleep)
+                DetailRow("最近一次打卡", item.lastSleep.formatIsoDate())
             }
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text("关闭") } }

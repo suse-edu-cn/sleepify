@@ -7,3 +7,6 @@ fun String.encodeToBase64(): String =
 
 fun Double.formatPoints(): String =
     if (this % 1.0 == 0.0) toInt().toString() else String.format("%.1f", this)
+
+fun String.formatIsoDate(): String =
+    replace("T", " ").replace("Z", "")
