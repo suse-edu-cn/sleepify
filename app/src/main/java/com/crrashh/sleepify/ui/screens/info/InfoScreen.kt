@@ -2,7 +2,15 @@ package com.crrashh.sleepify.ui.screens.info
 
 import android.content.Intent
 import android.net.Uri
+import coil3.compose.SubcomposeAsyncImage
 import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,14 +53,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.crrashh.sleepify.BuildConfig
+import com.crrashh.sleepify.R
 import com.crrashh.sleepify.util.formatPoints
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
@@ -65,6 +74,7 @@ fun InfoScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var showLogoutDialog by remember { mutableStateOf(false) }
+    val avatarUrl = uiState.userInfo?.qq?.takeIf { it.isNotBlank() }?.let { "https://q.qlogo.cn/g?b=qq&nk=$it&s=0" }
 
     LaunchedEffect(Unit) {
         viewModel.refresh()
@@ -101,12 +111,54 @@ fun InfoScreen(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(
-                        painter = painterResource(id = com.crrashh.sleepify.R.drawable.ic_avatar),
-                        contentDescription = "Heading",
-                        modifier = Modifier.size(72.dp).clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
+                    if (avatarUrl != null) {
+                        var imageFailed by remember { mutableStateOf(false) }
+                        val fallbackImage = @Composable {
+                            Image(
+                                painter = painterResource(R.drawable.ic_avatar),
+                                contentDescription = "头像",
+                                modifier = Modifier.size(72.dp).clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                        if (imageFailed) {
+                            fallbackImage()
+                        } else {
+                            SubcomposeAsyncImage(
+                                model = avatarUrl,
+                                contentDescription = "头像",
+                                modifier = Modifier.size(72.dp).clip(CircleShape),
+                                contentScale = ContentScale.Crop,
+                                loading = {
+                                    val infiniteTransition = rememberInfiniteTransition(label = "avatar_pulse")
+                                    val alpha by infiniteTransition.animateFloat(
+                                        initialValue = 0.3f,
+                                        targetValue = 0.7f,
+                                        animationSpec = infiniteRepeatable(
+                                            animation = tween(durationMillis = 800),
+                                            repeatMode = RepeatMode.Reverse
+                                        ),
+                                        label = "avatar_alpha"
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .size(72.dp)
+                                            .clip(CircleShape)
+                                            .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = alpha))
+                                    )
+                                },
+                                error = { fallbackImage() },
+                                onError = { imageFailed = true }
+                            )
+                        }
+                    } else {
+                        Image(
+                            painter = painterResource(R.drawable.ic_avatar),
+                            contentDescription = "头像",
+                            modifier = Modifier.size(72.dp).clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text("睡了么", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
