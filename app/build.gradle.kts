@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.crrashh.sleepify"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.crrashh.sleepify"
         minSdk = 31
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 33
         versionName = "1.0.1"
 
@@ -21,6 +21,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -38,7 +39,7 @@ android {
         buildConfig = true
         viewBinding = false
     }
-    compileSdkMinor = 1
+    compileSdkMinor = 0
     dependenciesInfo {
         includeInApk = true
         includeInBundle = true
@@ -89,6 +90,8 @@ dependencies {
 
     implementation(libs.datastore.preferences)
     implementation(libs.coroutines.android)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     debugImplementation(libs.androidx.ui.tooling)
 }
