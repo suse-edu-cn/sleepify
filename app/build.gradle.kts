@@ -13,8 +13,8 @@ android {
         applicationId = "com.crrashh.sleepify"
         minSdk = 31
         targetSdk = 37
-        versionCode = 33
-        versionName = "1.0.1"
+        versionCode = 40
+        versionName = "1.0.2"
 
     }
 
