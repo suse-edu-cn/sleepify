@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import '../styles/ranking.css'
 import { alert } from 'mdui/functions/alert.js'
 import { useUserState } from '@/components/UserStateProvider'
@@ -30,6 +30,22 @@ export default function RankingPage() {
         refreshPointsRanking,
     } = useUserState()
     const [rankingType, setRankingType] = useState<RankingType>('sleep')
+    const tabsRef = useRef<HTMLElement | null>(null)
+
+    useEffect(() => {
+        const el = tabsRef.current
+        if (!el) return
+
+        const handleChange = () => {
+            const value = (el as { value?: string }).value
+            if (value === 'sleep' || value === 'points') {
+                setRankingType(value)
+            }
+        }
+
+        el.addEventListener('change', handleChange)
+        return () => el.removeEventListener('change', handleChange)
+    }, [])
 
     const loading = rankingType === 'sleep' ? sleepRankingLoading : pointsRankingLoading
 
@@ -43,31 +59,17 @@ export default function RankingPage() {
 
     return (
         <section className="sleepify-page">
-            <h1 className="sleepify-ranking-title">排行榜</h1>
 
             <div className="sleepify-ranking-tools">
-                <div className="sleepify-ranking-switch">
-                    <mdui-button
-                        variant={rankingType === 'sleep' ? 'filled' : 'outlined'}
-                        onClick={() => {
-                            if (rankingType !== 'sleep') {
-                                setRankingType('sleep')
-                            }
-                        }}
-                    >
-                        周睡眠
-                    </mdui-button>
-                    <mdui-button
-                        variant={rankingType === 'points' ? 'filled' : 'outlined'}
-                        onClick={() => {
-                            if (rankingType !== 'points') {
-                                setRankingType('points')
-                            }
-                        }}
-                    >
-                        积分
-                    </mdui-button>
-                </div>
+                <mdui-tabs
+                    ref={tabsRef}
+                    value="sleep"
+                    variant="secondary"
+                    full-width
+                    className="sleepify-ranking-tabs">
+                    <mdui-tab value="sleep">周睡眠</mdui-tab>
+                    <mdui-tab value="points">积分</mdui-tab>
+                </mdui-tabs>
 
                 <mdui-button
                     icon="refresh"

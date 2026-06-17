@@ -12,15 +12,15 @@
     gap: 12px;
 }
 
-.sleepify-ranking-switch {
-    display: inline-flex;
-    gap: 8px;
-}
 
 .sleepify-ranking-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.sleepify-ranking-tabs {
+    width: 80%;
 }
 
 .sleepify-ranking-item {
