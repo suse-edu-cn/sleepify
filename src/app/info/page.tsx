@@ -80,13 +80,13 @@ export default function InfoPage() {
 
     return (
         <section className="sleepify-page">
-            <div className="sleepify-avatar-area">
+            <mdui-card className="sleepify-avatar-area">
                 <mdui-avatar
-                    src="https://obj.crrashh.com/prod/assets_sleepify/icon.jpg"
+                    src={user?.qq ? `https://q.qlogo.cn/g?b=qq&nk=${user.qq}&s=0` : 'https://obj.crrashh.com/crr-builds-fe/icons/sleepify-next.jpg'}
                     className="sleepify-avatar"
                 />
                 <div className="sleepify-info-title">睡了么</div>
-            </div>
+            </mdui-card>
 
             <div className="sleepify-info-area">
                 <div className="sleepify-catalog">个人信息</div>
@@ -109,12 +109,6 @@ export default function InfoPage() {
                                     <span className="sleepify-info-value">
                                         {user?.class ?? '-'}
                                     </span>
-                                </div>
-                            </mdui-list-item>
-                            <mdui-list-item className="sleepify-info-item" icon="message">
-                                <div className="sleepify-info-row">
-                                    <span>QQ</span>
-                                    <span className="sleepify-info-value">{user?.qq ?? '-'}</span>
                                 </div>
                             </mdui-list-item>
                             <mdui-list-item className="sleepify-info-item" icon="star">
