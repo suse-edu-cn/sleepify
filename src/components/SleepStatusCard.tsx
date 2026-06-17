@@ -59,7 +59,11 @@ export default function SleepStatusCard() {
 
     const sleepContent = useMemo(() => {
         if (sleepLoading) {
-            return <mdui-circular-progress />
+            return (
+                <div className="sleepify-card-loading">
+                    <mdui-circular-progress />
+                </div>
+            )
         }
 
         if (!sleepStatus) {

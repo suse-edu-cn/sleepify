@@ -25,7 +25,9 @@ export default function SleepStatsCard() {
         <mdui-card className="sleepify-card">
             <h2 className="sleepify-card-title">睡眠统计</h2>
             {sleepRankingLoading ? (
-                <mdui-circular-progress />
+                <div className="sleepify-card-loading">
+                    <mdui-circular-progress />
+                </div>
             ) : stats ? (
                 <div className="sleepify-stats-grid">
                     <div className="sleepify-stats-item">

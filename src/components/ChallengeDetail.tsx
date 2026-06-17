@@ -112,7 +112,7 @@ export default function ChallengeDetail() {
 
     if (loading) {
         return (
-            <section className="sleepify-page">
+            <section className="sleepify-page sleepify-page-center">
                 <mdui-circular-progress />
             </section>
         )

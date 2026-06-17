@@ -15,7 +15,9 @@ export default function PointsDashboard() {
                 <h2 className="sleepify-card-title">当前积分</h2>
                 <div className="sleepify-points-value-row">
                     {userLoading ? (
-                        <mdui-circular-progress />
+                        <div className="sleepify-card-loading">
+                            <mdui-circular-progress />
+                        </div>
                     ) : (
                         <div className="sleepify-points-value">
                             {typeof user?.points === 'number' ? user.points : '暂未获取到积分信息'}
@@ -35,7 +37,9 @@ export default function PointsDashboard() {
             <div className="sleepify-points-section">
                 <h2 className="sleepify-points-section-title">进行中的挑战</h2>
                 {challengesLoading ? (
-                    <mdui-circular-progress />
+                    <div className="sleepify-card-loading">
+                        <mdui-circular-progress />
+                    </div>
                 ) : challenges && challenges.length > 0 ? (
                     <div className="sleepify-points-challenge-list">
                         {challenges.map((item) => (

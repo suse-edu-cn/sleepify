@@ -92,7 +92,9 @@ export default function AutoSleepCard() {
                 />
             </div>
             {autoSleepLoading ? (
-                <mdui-circular-progress />
+                <div className="sleepify-card-loading">
+                    <mdui-circular-progress />
+                </div>
             ) : draftConfig.enabled ? (
                 <div className="sleepify-auto-sleep-config">
                     <div className="sleepify-auto-sleep-time">

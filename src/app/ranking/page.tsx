@@ -89,7 +89,9 @@ export default function RankingPage() {
             </div>
 
             {loading ? (
-                <mdui-circular-progress />
+                <div className="sleepify-page-center">
+                    <mdui-circular-progress />
+                </div>
             ) : rankingRows.length > 0 ? (
                 <div className="sleepify-ranking-list">
                     {rankingRows.map((item, index) => {

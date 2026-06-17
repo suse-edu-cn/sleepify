@@ -33,13 +33,19 @@ export default function PointsHistory() {
         void fetchHistory()
     }, [fetchHistory])
 
+    if (loading) {
+        return (
+            <section className="sleepify-page sleepify-page-center">
+                <mdui-circular-progress />
+            </section>
+        )
+    }
+
     return (
         <section className="sleepify-page">
             <h1 className="sleepify-points-history-title">积分历史</h1>
 
-            {loading ? (
-                <mdui-circular-progress />
-            ) : history.length > 0 ? (
+            {history.length > 0 ? (
                 <div className="sleepify-points-history-list">
                     {history.map((item, index) => (
                         <mdui-card

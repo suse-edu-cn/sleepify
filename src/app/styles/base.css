@@ -70,6 +70,13 @@ mdui-dialog::part(description) {
     gap: 16px;
 }
 
+.sleepify-page-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
 .sleepify-catalog {
     font-weight: 600;
     color: rgb(var(--mdui-color-on-primary-dark));
@@ -97,6 +104,13 @@ mdui-dialog::part(description) {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.sleepify-card-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0;
 }
 
 .sleepify-card-title {
